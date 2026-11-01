@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>대광 — 광냥이들이 광고한 물건</title>
+<meta name="description" content="유튜브 채널 대광(@광냥이들) 영상에 나온 상품을 모아둔 페이지입니다.">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Malgun Gothic", "Apple SD Gothic Neo", sans-serif;
+    background: #FFF6E3;
+    color: #2B2118;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 560px; margin: 0 auto; padding-bottom: 28px; }
+
+  /* 상단 */
+  .hero img { width: 100%; height: 150px; object-fit: cover; object-position: center 30%; display: block; }
+  .head { padding: 14px 16px 10px; }
+  .head h1 { font-size: 21px; font-weight: 800; letter-spacing: -0.3px; }
+  .head h1 .accent { color: #E8890C; }
+  .guide {
+    margin-top: 8px; font-size: 14.5px; font-weight: 600; line-height: 1.45;
+    background: #FFE9B8; border: 1px solid #F5C451; border-radius: 10px; padding: 9px 12px;
+  }
+
+  /* 상품 카드 목록 */
+  .list { padding: 12px 12px 0; display: flex; flex-direction: column; gap: 10px; }
+  .card {
+    display: flex; gap: 12px; background: #fff; border-radius: 14px; padding: 10px;
+    box-shadow: 0 1px 4px rgba(122, 74, 0, 0.13);
+  }
+  .card .thumb { flex: 0 0 128px; }
+  .card .thumb img {
+    width: 128px; height: 128px; object-fit: cover; border-radius: 10px; display: block;
+    background: #F7EDD8;
+  }
+  .card .info { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+  .video-tag {
+    align-self: flex-start; font-size: 12px; font-weight: 700; color: #fff;
+    background: #7A4A00; border-radius: 999px; padding: 3px 9px; white-space: nowrap;
+    max-width: 100%; overflow: hidden; text-overflow: ellipsis;
+  }
+  .name {
+    margin-top: 6px; font-size: 15.5px; font-weight: 700; line-height: 1.3;
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+  }
+  .price { margin-top: 5px; font-size: 19px; font-weight: 800; color: #D9480F; letter-spacing: -0.3px; }
+  .buy {
+    margin-top: auto; padding-top: 8px;
+  }
+  .buy a {
+    display: block; text-align: center; text-decoration: none;
+    background: linear-gradient(180deg, #FFB703, #F59F00); color: #3A2700;
+    font-size: 15px; font-weight: 800; padding: 10px 0; border-radius: 10px;
+  }
+  .buy a:active { filter: brightness(0.95); }
+  .empty { text-align: center; color: #8A6D3B; font-size: 14px; padding: 30px 0; }
+
+  /* 하단 고지 */
+  footer {
+    margin: 22px 16px 0; padding-top: 14px; border-top: 1px solid #EDD9AC;
+    font-size: 12px; line-height: 1.6; color: #8A6D3B; text-align: center;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="hero"><img src="img/banner.jpg" alt="대광 채널 배너 — 광냥이들"></div>
+  <div class="head">
+    <h1><span class="accent">대광</span> — 광냥이들이 광고한 물건</h1>
+    <p class="guide">영상에서 본 물건이 아래에 있어요. 눌러서 쿠팡에서 보세요.</p>
+  </div>
+
+  <div class="list" id="productList"></div>
+
+  <footer>
+    이 페이지는 쿠팡 파트너스 활동의 일환으로 운영되며, 링크를 통해 구매하시면 일정액의 수수료를 제공받습니다.
+  </footer>
+</div>
+
+<script>
+  /* ============================================================
+     상품 데이터 — 새 상품은 이 배열의 맨 위에 항목을 추가하면 됩니다.
+     (맨 위 = 최신순으로 페이지에 표시됩니다)
+     name: 상품명 / price: 가격 표기 / img: 이미지 경로
+     link: 쿠팡 파트너스 링크 / video: 관련 영상 제목
+     ============================================================ */
+  const PRODUCTS = [
+    {
+      name: "하니모아 마카롱 털 귀마개",
+      price: "20,900원",
+      img: "img/p001_earmuffs.jpg",
+      link: "https://link.coupang.com/a/ikkF8qwHK0",
+      video: "귀마개편"
+    }
+  ];
+
+  const list = document.getElementById('productList');
+  if (PRODUCTS.length === 0) {
+    list.innerHTML = '<p class="empty">아직 등록된 상품이 없어요.</p>';
+  } else {
+    list.innerHTML = PRODUCTS.map(p => `
+      <article class="card">
+        <div class="thumb"><img src="${p.img}" alt="${p.name}" loading="lazy"></div>
+        <div class="info">
+          <span class="video-tag">▶ 관련 영상 · ${p.video}</span>
+          <h2 class="name">${p.name}</h2>
+          <p class="price">${p.price}</p>
+          <div class="buy"><a href="${p.link}" target="_blank" rel="sponsored noopener">쿠팡에서 보기</a></div>
+        </div>
+      </article>
+    `).join('');
+  }
+</script>
+</body>
+</html>

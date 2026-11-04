@@ -16,7 +16,6 @@
   .wrap { max-width: 560px; margin: 0 auto; padding-bottom: 28px; }
 
   /* 상단 */
-  .hero img { width: 100%; height: 150px; object-fit: cover; object-position: center 30%; display: block; }
   .head { padding: 14px 16px 10px; }
   .head h1 { font-size: 21px; font-weight: 800; letter-spacing: -0.3px; }
   .head h1 .accent { color: #E8890C; }
@@ -33,7 +32,7 @@
     border-radius: 14px; overflow: hidden; background: #000;
     box-shadow: 0 1px 4px rgba(122, 74, 0, 0.13);
   }
-  .funnel-video iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; display: block; }
+  .funnel-video video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; border: 0; display: block; }
   .funnel-video p { margin-top: 7px; font-size: 13.5px; font-weight: 700; color: #7A4A00; text-align: center; }
 
   /* 카테고리 탭 */
@@ -94,17 +93,16 @@
 </head>
 <body>
 <div class="wrap">
-  <div class="hero"><img src="img/banner.jpg" alt="벨라·레오·토토"></div>
+  <div class="funnel-video">
+    <div class="frame">
+      <video src="hub_greeting.mp4" autoplay muted loop playsinline preload="auto" onclick="this.muted=!this.muted" aria-label="벨라·레오·토토 인사 영상"></video>
+    </div>
+    <p>세 마리가 직접 골라 본 상품, 아래에서 만나 보세요</p>
+  </div>
+
   <div class="head">
     <h1><span class="accent">세 마리</span>가 골라 본 인기 상품 모아보기</h1>
     <p class="guide">세 마리가 골라 본 반려묘·반려견 용품부터 생활 인기 상품까지, 여기에 모아 뒀습니다. 눌러서 쿠팡에서 보세요.</p>
-  </div>
-
-  <div class="funnel-video">
-    <div class="frame">
-      <iframe src="https://www.youtube.com/embed/PMSF3l81n2c?autoplay=1&mute=1&playsinline=1&loop=1&playlist=PMSF3l81n2c" title="집사가 사료값 벌어오래요" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
-    </div>
-    <p>세 마리가 직접 전하는 이야기, 먼저 보고 가세요</p>
   </div>
 
   <div class="tabs" id="tabBar">

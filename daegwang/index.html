@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>세 마리가 골라 본 반려묘·반려견 인기 상품</title>
-<meta name="description" content="벨라·레오·토토가 직접 골라 본 반려묘·반려견 인기 상품을 모아둔 페이지입니다.">
+<title>세 마리가 골라 본 인기 상품 모아보기</title>
+<meta name="description" content="벨라·레오·토토가 직접 골라 본 반려묘·반려견 용품과 생활 인기 상품을 모아둔 페이지입니다.">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
@@ -23,6 +23,18 @@
   .guide {
     margin-top: 8px; font-size: 14.5px; font-weight: 600; line-height: 1.45;
     background: #FFE9B8; border: 1px solid #F5C451; border-radius: 10px; padding: 9px 12px;
+  }
+
+
+  /* 카테고리 탭 */
+  .tabs { display: flex; gap: 6px; padding: 12px 12px 0; flex-wrap: wrap; }
+  .tabs button {
+    border: 1px solid #EDD9AC; background: #fff; color: #7A4A00;
+    font-size: 14px; font-weight: 700; padding: 8px 14px; border-radius: 999px; cursor: pointer;
+    font-family: inherit;
+  }
+  .tabs button.active {
+    background: linear-gradient(180deg, #FFB703, #F59F00); color: #3A2700; border-color: #F59F00;
   }
 
   /* 상품 카드 목록 */
@@ -74,8 +86,16 @@
 <div class="wrap">
   <div class="hero"><img src="img/banner.jpg" alt="벨라·레오·토토"></div>
   <div class="head">
-    <h1><span class="accent">세 마리</span>가 골라 본 반려묘·반려견 인기 상품</h1>
-    <p class="guide">세 마리가 직접 골라 본 반려묘·반려견 인기 상품, 여기에 모아 뒀습니다. 눌러서 쿠팡에서 보세요.</p>
+    <h1><span class="accent">세 마리</span>가 골라 본 인기 상품 모아보기</h1>
+    <p class="guide">세 마리가 골라 본 반려묘·반려견 용품부터 생활 인기 상품까지, 여기에 모아 뒀습니다. 눌러서 쿠팡에서 보세요.</p>
+  </div>
+
+  <div class="tabs" id="tabBar">
+    <button data-tab="all" class="active">전체</button>
+    <button data-tab="cat">반려묘</button>
+    <button data-tab="dog">반려견</button>
+    <button data-tab="living">생활용품</button>
+    <button data-tab="etc">기타</button>
   </div>
 
   <div class="list" id="productList"></div>
@@ -89,13 +109,14 @@
 <script>
   /* ============================================================
      상품 데이터 — 반려동물 인기 상품 큐레이션 (2026-11-05)
-     선정 근거 전문: daegwang/hub_pet_products_research_2026-11-05.md
+     선정 근거 전문: daegwang/hub_pet_products_research_2026-11-05.md + hub_expansion_2026-11-05.md
      name: 상품명 / price: 가격 표기 / img: 이미지 경로
      link: 쿠팡 파트너스 링크 (발급 후 입력 — 비어 있으면 '준비 중' 표시)
      tag: 카테고리 + 선정 근거 요약
      ============================================================ */
   const PRODUCTS = [
     {
+      tab: "cat",
       name: "캐츠랑 전연령 고양이 건식사료, 닭+참치, 5kg, 1개",
       price: "16,300원",
       img: "img/p002_catsrang.jpg",
@@ -103,6 +124,7 @@
       tag: "고양이 사료 · 쿠팡 판매 1위"
     },
     {
+      tab: "cat",
       name: "탐사 전연령용 고양이 사료, 20kg, 닭, 1개",
       price: "45,730원",
       img: "img/p003_tamsa_cat.jpg",
@@ -110,6 +132,7 @@
       tag: "고양이 사료 · 상품평 2.2만+"
     },
     {
+      tab: "cat",
       name: "챠오츄르 고양이 구루메 버라이어티 간식 60p, 혼합맛, 840g, 1개",
       price: "30,650원",
       img: "img/p004_chao.jpg",
@@ -117,6 +140,7 @@
       tag: "고양이 간식 · 판매 베스트 1위"
     },
     {
+      tab: "cat",
       name: "굿밸런스 고양이 짜먹는 간식 플러스 60p, 혼합맛(연어/참치), 720g, 1개",
       price: "15,600원",
       img: "img/p005_goodbalance.jpg",
@@ -124,6 +148,7 @@
       tag: "고양이 간식 · 츄르 비교 1위"
     },
     {
+      tab: "cat",
       name: "샌드백 프리미엄 벤토나이트 고양이 모래 오리지널, 9kg, 2개, 무향",
       price: "53,200원",
       img: "img/p006_sandbag.jpg",
@@ -131,6 +156,7 @@
       tag: "고양이 모래 · 쿠팡 판매 1위"
     },
     {
+      tab: "cat",
       name: "탐사 고양이 두부모래 7L (약 2.8kg), 6개, 오리지널",
       price: "26,990원",
       img: "img/p007_tamsa_tofu.jpg",
@@ -138,6 +164,7 @@
       tag: "고양이 모래 · ★4.8 · 리뷰 13.7만"
     },
     {
+      tab: "cat",
       name: "코멧 펫 고양이 쇼파 스크래쳐, 타원형, 1개",
       price: "5,690원",
       img: "img/p008_comet.jpg",
@@ -145,6 +172,7 @@
       tag: "고양이 장난감·스크래쳐 · 판매 1위"
     },
     {
+      tab: "cat",
       name: "펫츠몬 고양이 퍼펙트 타원형 스크래쳐, 혼합색상, 1개",
       price: "4,990원",
       img: "img/p009_petsmon.jpg",
@@ -152,6 +180,7 @@
       tag: "고양이 장난감·스크래쳐 · 판매 베스트"
     },
     {
+      tab: "dog",
       name: "탐사 강아지 사료 연어 레시피, 3kg, 1개",
       price: "15,990원",
       img: "img/p010_tamsa_dog.jpg",
@@ -159,6 +188,7 @@
       tag: "강아지 사료 · 판매 1위 · 상품평 7.5만"
     },
     {
+      tab: "dog",
       name: "도그랑 전연령 강아지 클래식 건식사료, 닭, 5kg, 1개",
       price: "9,500원",
       img: "img/p011_dograng.jpg",
@@ -166,6 +196,7 @@
       tag: "강아지 사료 · 상품평 3.5만"
     },
     {
+      tab: "dog",
       name: "굿데이 강아지 건강한 육포, 오리가슴살 스틱, 300g, 1개",
       price: "11,500원",
       img: "img/p012_goodday.jpg",
@@ -173,6 +204,7 @@
       tag: "강아지 간식 · 상품평 6.8만"
     },
     {
+      tab: "dog",
       name: "그리니즈 강아지 오리지널 덴탈껌, 티니 오리지널, 765g, 1개",
       price: "55,000원",
       img: "img/p013_greenies.png",
@@ -180,6 +212,7 @@
       tag: "강아지 간식 · 상품평 2.9만"
     },
     {
+      tab: "dog",
       name: "웁쉬 스며들개 고흡수 강아지 배변패드 두툼형 피톤치드향, 3개, 20개입",
       price: "32,090원",
       img: "img/p014_oopsie.jpg",
@@ -187,19 +220,282 @@
       tag: "강아지 배변패드 · 판매 1위 · ★4.9"
     },
     {
+      tab: "dog",
       name: "뽀시래기 강아지 든든한 배변패드, 30개입, 4개",
       price: "44,500원",
       img: "img/p015_pposiraegi.jpg",
       link: "https://link.coupang.com/a/ipoAIqpjLE",
       tag: "강아지 배변패드 · 판매 2위"
+    },
+    {
+      tab: "cat",
+      name: "본아페티 응고형 더스트 프리 벤토나이트 고양이모래, 6kg, 3개, 무향",
+      price: "31,350원",
+      img: "img/p016.jpg",
+      link: "https://link.coupang.com/a/ipq9tNgNQy",
+      tag: "고양이 모래 · 쿠팡 홈픽업 모래 1위"
+    },
+    {
+      tab: "cat",
+      name: "하림펫푸드 전연령 밥이보약 고양이사료, 헤어볼, 3.4kg, 1개",
+      price: "36,060원",
+      img: "img/p017.jpg",
+      link: "https://link.coupang.com/a/iprb5KGFNY",
+      tag: "고양이 사료 · 상품평 51,814개"
+    },
+    {
+      tab: "cat",
+      name: "펫리서치 짜먹는 고양이 간식 츄, 참치+연어+닭고기, 15g, 90개",
+      price: "12,690원",
+      img: "img/p018.jpg",
+      link: "https://link.coupang.com/a/iprdh6K2rQ",
+      tag: "고양이 간식 · 랭킹박스 반려동물 4위"
+    },
+    {
+      tab: "cat",
+      name: "템테이션 고양이 메가팩 스낵 간식, 맛있는 닭고기맛, 160g, 3개",
+      price: "12,920원",
+      img: "img/p019.jpg",
+      link: "https://link.coupang.com/a/iprfMpAzE4",
+      tag: "고양이 간식 · 랭킹박스 반려동물 50위"
+    },
+    {
+      tab: "cat",
+      name: "딩동펫 고양이 낚시대 우드 야옹이 + 깃털 + 깃털 와이어 장난감 세트, 혼합 색상, 1세트",
+      price: "5,230원",
+      img: "img/p020.jpg",
+      link: "https://link.coupang.com/a/iprg2rzKCG",
+      tag: "고양이 장난감 · ★4.5 · 상품평 9,734개"
+    },
+    {
+      tab: "cat",
+      name: "코멧 펫 고양이 사막화방지 벌집모양 모래매트, 베이지, 특대형(90 x 60 cm), 1개",
+      price: "9,990원",
+      img: "img/p021.jpg",
+      link: "https://link.coupang.com/a/iprihJiDC0",
+      tag: "고양이 화장실 · 랭킹박스 반려동물 61위"
+    },
+    {
+      tab: "cat",
+      name: "행복한댕냥이 원터치 케어 브러쉬, 블루, 1개",
+      price: "8,740원",
+      img: "img/p022.jpg",
+      link: "https://link.coupang.com/a/iprjvwjOeW",
+      tag: "반려동물 브러쉬 · 랭킹박스 반려동물 67위"
+    },
+    {
+      tab: "cat",
+      name: "인트라젠 반려동물 플러스 영양제, 200g, 2개",
+      price: "53,500원",
+      img: "img/p023.jpg",
+      link: "https://link.coupang.com/a/iprk6EjFHU",
+      tag: "반려동물 영양제 · 상품평 21,021개"
+    },
+    {
+      tab: "cat",
+      name: "옥희독희 반려동물 꿀잠 이동가방, 혼합색상, 1개",
+      price: "89,500원",
+      img: "img/p024.jpg",
+      link: "https://link.coupang.com/a/iprmgH8PVk",
+      tag: "반려동물 이동장 · 쿠팡 이동장 판매 1위"
+    },
+    {
+      tab: "cat",
+      name: "에버크린 ES 언센티드 고양이 모래, 19kg, 1개, 무향",
+      price: "37,000원",
+      img: "img/p025.jpg",
+      link: "https://link.coupang.com/a/iprnrbpxAG",
+      tag: "고양이 모래 · 랭킹박스 반려동물 15위"
+    },
+    {
+      tab: "dog",
+      name: "탐사 실속형 배변패드, 100개입, 6개",
+      price: "32,290원",
+      img: "img/p026.jpg",
+      link: "https://link.coupang.com/a/iproCfgROe",
+      tag: "강아지 배변패드 · 랭킹박스 반려동물 1위"
+    },
+    {
+      tab: "dog",
+      name: "탐사 강아지 간식 고구마말랭이 큐브, 1kg, 1개",
+      price: "9,890원",
+      img: "img/p027.jpg",
+      link: "https://link.coupang.com/a/iprp3GSWUC",
+      tag: "강아지 간식 · 랭킹박스 반려동물 10위"
+    },
+    {
+      tab: "dog",
+      name: "하림펫푸드밥이보약 강아지 기능성 사료, 뼈/관절강화, 3.4kg, 1개",
+      price: "34,100원",
+      img: "img/p028.jpg",
+      link: "https://link.coupang.com/a/iprrhs52uy",
+      tag: "강아지 사료 · 상품평 30,042개"
+    },
+    {
+      tab: "dog",
+      name: "닥터블랭크 저자극 강아지 샴푸 베이비파우더향, 500ml, 1개",
+      price: "14,900원",
+      img: "img/p029.jpg",
+      link: "https://link.coupang.com/a/iprstHUg8G",
+      tag: "강아지 샴푸 · 랭킹박스 반려동물 6위"
+    },
+    {
+      tab: "dog",
+      name: "버박 CET 치약 닭고기맛, 70g, 1개",
+      price: "17,720원",
+      img: "img/p030.jpg",
+      link: "https://link.coupang.com/a/iprtIDlgZw",
+      tag: "강아지 덴탈 · 랭킹박스 반려동물 12위"
+    },
+    {
+      tab: "dog",
+      name: "콩 클래식 애견용 장난감, 빨강, 1개",
+      price: "8,000원",
+      img: "img/p031.jpg",
+      link: "https://link.coupang.com/a/iprvBVd1Xw",
+      tag: "강아지 장난감 · ★4.5 · 리뷰 1,540개"
+    },
+    {
+      tab: "dog",
+      name: "미즈펫 야간 빛 반사 세이프 강아지 하네스 + 리드줄, 1개",
+      price: "13,800원",
+      img: "img/p032.jpg",
+      link: "https://link.coupang.com/a/iprwSaYHw4",
+      tag: "강아지 하네스 · ★4.5 · 후기 8,630개"
+    },
+    {
+      tab: "dog",
+      name: "닥터바이 강아지 영양제, 70정, 뼈/관절강화, 1개",
+      price: "29,900원",
+      img: "img/p033.jpg",
+      link: "https://link.coupang.com/a/iprx51GY44",
+      tag: "강아지 영양제 · 상품평 2,138개"
+    },
+    {
+      tab: "living",
+      name: "깨끗한나라 순수 프리미엄 더 퍼스트 천연펄프 3겹 고급롤화장지, 30m, 30개입, 2개",
+      price: "38,290원",
+      img: "img/p034.jpg",
+      link: "https://link.coupang.com/a/iprBYSkQO4",
+      tag: "생활용품 · 롤화장지 · 쿠팡 기획전 베스트"
+    },
+    {
+      tab: "living",
+      name: "피죤 레귤러 섬유유연제 핑크로즈 본품, 2.5L, 1개",
+      price: "4,750원",
+      img: "img/p035.jpg",
+      link: "https://link.coupang.com/a/iprElhxpM4",
+      tag: "생활용품 · 섬유유연제 · 상품평 271,623개"
+    },
+    {
+      tab: "living",
+      name: "퍼실 딥클린 라벤더젤 드럼용 액상세제 리필, 1.5L, 2개",
+      price: "13,790원",
+      img: "img/p036.jpg",
+      link: "https://link.coupang.com/a/iprFveQS84",
+      tag: "생활용품 · 세탁세제 · 쿠팡 기획전 딥클린 라인"
+    },
+    {
+      tab: "living",
+      name: "테크 베이킹소다 플러스 구연산 실내건조 액체세제 드럼용 리필, 2L, 4개",
+      price: "19,080원",
+      img: "img/p037.jpg",
+      link: "https://link.coupang.com/a/iprG9s7SaO",
+      tag: "생활용품 · 세탁세제 · 상품평 25,004개"
+    },
+    {
+      tab: "living",
+      name: "순샘 주방세제 용기 프레시 베리향, 3L, 1개",
+      price: "6,480원",
+      img: "img/p038.jpg",
+      link: "https://link.coupang.com/a/iprQyisaXY",
+      tag: "생활용품 · 주방세제 · 쿠팡 기획전 BEST"
+    },
+    {
+      tab: "living",
+      name: "유한락스 욕실세제 멀티액션 욕실청소용 세정제, 510ml, 3개",
+      price: "19,800원",
+      img: "img/p039.jpg",
+      link: "https://link.coupang.com/a/iprRNI7nm8",
+      tag: "생활용품 · 욕실세정 · 상품평 183,067개"
+    },
+    {
+      tab: "living",
+      name: "베베숲 시그니처 위드 블루 아기물티슈 캡형, 75g, 70매, 10개",
+      price: "17,430원",
+      img: "img/p040.jpg",
+      link: "https://link.coupang.com/a/iprJT3uVOK",
+      tag: "생활용품 · 물티슈 · 상품평 116,415개"
+    },
+    {
+      tab: "living",
+      name: "깨끗한나라 데일리 키친타올 그린티, 150매, 8개",
+      price: "6,410원",
+      img: "img/p041.jpg",
+      link: "https://link.coupang.com/a/iprS04T8CW",
+      tag: "생활용품 · 키친타올 · 쿠팡 기획전 상품"
+    },
+    {
+      tab: "living",
+      name: "코멧 매직블럭 중형, 100개",
+      price: "6,000원",
+      img: "img/p042.jpg",
+      link: "https://link.coupang.com/a/iprT99RHCC",
+      tag: "생활용품 · 청소 · 랭킹박스 생활 34위"
+    },
+    {
+      tab: "living",
+      name: "스카치브라이트 스펀지 다목적 수세미, 5개입, 1개",
+      price: "3,780원",
+      img: "img/p043.jpg",
+      link: "https://link.coupang.com/a/iprVQa8Boq",
+      tag: "생활용품 · 주방 · 랭킹박스 주방 베스트"
+    },
+    {
+      tab: "etc",
+      name: "듀라셀 알카라인 AA 건전지, 20개입, 1개",
+      price: "14,900원",
+      img: "img/p044.jpg",
+      link: "https://link.coupang.com/a/iprW0zg7lk",
+      tag: "기타 · 랭킹박스 생활 1위"
+    },
+    {
+      tab: "etc",
+      name: "하루온 군인핫팩 포켓용 대용량 핫팩 160g, 30개",
+      price: "12,770원",
+      img: "img/p045.jpg",
+      link: "https://link.coupang.com/a/iprX8TGe9B",
+      tag: "기타 · 랭킹박스 생활 3위"
+    },
+    {
+      tab: "etc",
+      name: "코멧 사선컷팅 일반형 테이프 클리너 리필 16cm x 12m, 15개",
+      price: "10,990원",
+      img: "img/p046.jpg",
+      link: "https://link.coupang.com/a/iprZgtOYCa",
+      tag: "기타 · 랭킹박스 생활 7위"
+    },
+    {
+      tab: "etc",
+      name: "에코파워탭 순동 일체형 개별 스위치 멀티탭 4구 CSG-40415 + 안전커버, 2m, 1개",
+      price: "15,500원",
+      img: "img/p047.jpg",
+      link: "https://link.coupang.com/a/ipr0XxfdMy",
+      tag: "기타 · 랭킹박스 생활 30위"
+    },
+    {
+      tab: "etc",
+      name: "송월타월 호텔수건 크러쉬 150g 30수 면사, 진회색, 5개",
+      price: "15,500원",
+      img: "img/p048.jpg",
+      link: "https://link.coupang.com/a/ipr4tUjneC",
+      tag: "기타 · 랭킹박스 생활 20위"
     }
   ];
 
   const list = document.getElementById('productList');
-  if (PRODUCTS.length === 0) {
-    list.innerHTML = '<p class="empty">아직 등록된 상품이 없어요.</p>';
-  } else {
-    list.innerHTML = PRODUCTS.map(p => `
+  function cardHTML(p) {
+    return `
       <article class="card">
         <div class="thumb"><img src="${p.img}" alt="${p.name}" loading="lazy"></div>
         <div class="info">
@@ -210,9 +506,19 @@
             ? `<a href="${p.link}" target="_blank" rel="sponsored noopener">쿠팡에서 보기</a>`
             : `<span class="pending">쿠팡 링크 준비 중</span>`}</div>
         </div>
-      </article>
-    `).join('');
+      </article>`;
   }
+  function render(tab) {
+    const items = tab === 'all' ? PRODUCTS : PRODUCTS.filter(p => p.tab === tab);
+    list.innerHTML = items.length ? items.map(cardHTML).join('') : '<p class="empty">아직 등록된 상품이 없어요.</p>';
+  }
+  document.getElementById('tabBar').addEventListener('click', e => {
+    const btn = e.target.closest('button[data-tab]');
+    if (!btn) return;
+    document.querySelectorAll('#tabBar button').forEach(b => b.classList.toggle('active', b === btn));
+    render(btn.dataset.tab);
+  });
+  render('all');
 </script>
 </body>
 </html>

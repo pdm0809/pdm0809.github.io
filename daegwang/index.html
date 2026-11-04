@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>대광 — 광냥이들이 광고한 물건</title>
-<meta name="description" content="유튜브 채널 대광(@광냥이들) 영상에 나온 상품을 모아둔 페이지입니다.">
+<title>세 마리가 골라 본 반려묘·반려견 인기 상품</title>
+<meta name="description" content="벨라·레오·토토가 직접 골라 본 반려묘·반려견 인기 상품을 모아둔 페이지입니다.">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
@@ -56,6 +56,11 @@
     font-size: 15px; font-weight: 800; padding: 10px 0; border-radius: 10px;
   }
   .buy a:active { filter: brightness(0.95); }
+  .buy span.pending {
+    display: block; text-align: center;
+    background: #EFE6D2; color: #8A6D3B;
+    font-size: 15px; font-weight: 800; padding: 10px 0; border-radius: 10px;
+  }
   .empty { text-align: center; color: #8A6D3B; font-size: 14px; padding: 30px 0; }
 
   /* 하단 고지 */
@@ -67,33 +72,126 @@
 </head>
 <body>
 <div class="wrap">
-  <div class="hero"><img src="img/banner.jpg" alt="대광 채널 배너 — 광냥이들"></div>
+  <div class="hero"><img src="img/banner.jpg" alt="벨라·레오·토토"></div>
   <div class="head">
-    <h1><span class="accent">대광</span> — 광냥이들이 광고한 물건</h1>
-    <p class="guide">영상에서 본 물건이 아래에 있어요. 눌러서 쿠팡에서 보세요.</p>
+    <h1><span class="accent">세 마리</span>가 골라 본 반려묘·반려견 인기 상품</h1>
+    <p class="guide">세 마리가 직접 골라 본 반려묘·반려견 인기 상품, 여기에 모아 뒀습니다. 눌러서 쿠팡에서 보세요.</p>
   </div>
 
   <div class="list" id="productList"></div>
 
   <footer>
+    가격·판매 순위는 확인 시점(2026-11-05) 기준이며 실제 판매가와 다를 수 있습니다.<br>
     이 페이지는 쿠팡 파트너스 활동의 일환으로 운영되며, 링크를 통해 구매하시면 일정액의 수수료를 제공받습니다.
   </footer>
 </div>
 
 <script>
   /* ============================================================
-     상품 데이터 — 새 상품은 이 배열의 맨 위에 항목을 추가하면 됩니다.
-     (맨 위 = 최신순으로 페이지에 표시됩니다)
+     상품 데이터 — 반려동물 인기 상품 큐레이션 (2026-11-05)
+     선정 근거 전문: daegwang/hub_pet_products_research_2026-11-05.md
      name: 상품명 / price: 가격 표기 / img: 이미지 경로
-     link: 쿠팡 파트너스 링크 / video: 관련 영상 제목
+     link: 쿠팡 파트너스 링크 (발급 후 입력 — 비어 있으면 '준비 중' 표시)
+     tag: 카테고리 + 선정 근거 요약
      ============================================================ */
   const PRODUCTS = [
     {
-      name: "하니모아 마카롱 털 귀마개",
-      price: "20,900원",
-      img: "img/p001_earmuffs.jpg",
-      link: "https://link.coupang.com/a/ikkF8qwHK0",
-      video: "귀마개편"
+      name: "캐츠랑 전연령 고양이 건식사료, 닭+참치, 5kg, 1개",
+      price: "16,300원",
+      img: "img/p002_catsrang.jpg",
+      link: "https://link.coupang.com/a/ipn6YuP8Eu",
+      tag: "고양이 사료 · 쿠팡 판매 1위"
+    },
+    {
+      name: "탐사 전연령용 고양이 사료, 20kg, 닭, 1개",
+      price: "45,730원",
+      img: "img/p003_tamsa_cat.jpg",
+      link: "https://link.coupang.com/a/ipoawwGajY",
+      tag: "고양이 사료 · 상품평 2.2만+"
+    },
+    {
+      name: "챠오츄르 고양이 구루메 버라이어티 간식 60p, 혼합맛, 840g, 1개",
+      price: "30,650원",
+      img: "img/p004_chao.jpg",
+      link: "https://link.coupang.com/a/ipoQaZNzDE",
+      tag: "고양이 간식 · 판매 베스트 1위"
+    },
+    {
+      name: "굿밸런스 고양이 짜먹는 간식 플러스 60p, 혼합맛(연어/참치), 720g, 1개",
+      price: "15,600원",
+      img: "img/p005_goodbalance.jpg",
+      link: "https://link.coupang.com/a/ipocBPfP5g",
+      tag: "고양이 간식 · 츄르 비교 1위"
+    },
+    {
+      name: "샌드백 프리미엄 벤토나이트 고양이 모래 오리지널, 9kg, 2개, 무향",
+      price: "53,200원",
+      img: "img/p006_sandbag.jpg",
+      link: "https://link.coupang.com/a/iposMjMBga",
+      tag: "고양이 모래 · 쿠팡 판매 1위"
+    },
+    {
+      name: "탐사 고양이 두부모래 7L (약 2.8kg), 6개, 오리지널",
+      price: "26,990원",
+      img: "img/p007_tamsa_tofu.jpg",
+      link: "https://link.coupang.com/a/ipoIcEDwwC",
+      tag: "고양이 모래 · ★4.8 · 리뷰 13.7만"
+    },
+    {
+      name: "코멧 펫 고양이 쇼파 스크래쳐, 타원형, 1개",
+      price: "5,690원",
+      img: "img/p008_comet.jpg",
+      link: "https://link.coupang.com/a/ipouIOLPEa",
+      tag: "고양이 장난감·스크래쳐 · 판매 1위"
+    },
+    {
+      name: "펫츠몬 고양이 퍼펙트 타원형 스크래쳐, 혼합색상, 1개",
+      price: "4,990원",
+      img: "img/p009_petsmon.jpg",
+      link: "https://link.coupang.com/a/ipovUPxco8",
+      tag: "고양이 장난감·스크래쳐 · 판매 베스트"
+    },
+    {
+      name: "탐사 강아지 사료 연어 레시피, 3kg, 1개",
+      price: "15,990원",
+      img: "img/p010_tamsa_dog.jpg",
+      link: "https://link.coupang.com/a/ipow52dISO",
+      tag: "강아지 사료 · 판매 1위 · 상품평 7.5만"
+    },
+    {
+      name: "도그랑 전연령 강아지 클래식 건식사료, 닭, 5kg, 1개",
+      price: "9,500원",
+      img: "img/p011_dograng.jpg",
+      link: "https://link.coupang.com/a/ipoyjYj3EO",
+      tag: "강아지 사료 · 상품평 3.5만"
+    },
+    {
+      name: "굿데이 강아지 건강한 육포, 오리가슴살 스틱, 300g, 1개",
+      price: "11,500원",
+      img: "img/p012_goodday.jpg",
+      link: "https://link.coupang.com/a/ipozvrKAy4",
+      tag: "강아지 간식 · 상품평 6.8만"
+    },
+    {
+      name: "그리니즈 강아지 오리지널 덴탈껌, 티니 오리지널, 765g, 1개",
+      price: "55,000원",
+      img: "img/p013_greenies.png",
+      link: "https://link.coupang.com/a/ipoT3mLkl2",
+      tag: "강아지 간식 · 상품평 2.9만"
+    },
+    {
+      name: "웁쉬 스며들개 고흡수 강아지 배변패드 두툼형 피톤치드향, 3개, 20개입",
+      price: "32,090원",
+      img: "img/p014_oopsie.jpg",
+      link: "https://link.coupang.com/a/ipoXVtRBEy",
+      tag: "강아지 배변패드 · 판매 1위 · ★4.9"
+    },
+    {
+      name: "뽀시래기 강아지 든든한 배변패드, 30개입, 4개",
+      price: "44,500원",
+      img: "img/p015_pposiraegi.jpg",
+      link: "https://link.coupang.com/a/ipoAIqpjLE",
+      tag: "강아지 배변패드 · 판매 2위"
     }
   ];
 
@@ -105,10 +203,12 @@
       <article class="card">
         <div class="thumb"><img src="${p.img}" alt="${p.name}" loading="lazy"></div>
         <div class="info">
-          <span class="video-tag">▶ 관련 영상 · ${p.video}</span>
+          <span class="video-tag">${p.tag}</span>
           <h2 class="name">${p.name}</h2>
           <p class="price">${p.price}</p>
-          <div class="buy"><a href="${p.link}" target="_blank" rel="sponsored noopener">쿠팡에서 보기</a></div>
+          <div class="buy">${p.link
+            ? `<a href="${p.link}" target="_blank" rel="sponsored noopener">쿠팡에서 보기</a>`
+            : `<span class="pending">쿠팡 링크 준비 중</span>`}</div>
         </div>
       </article>
     `).join('');

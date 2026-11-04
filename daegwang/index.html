@@ -26,6 +26,16 @@
   }
 
 
+  /* 영상 임베드 */
+  .funnel-video { padding: 12px 12px 0; }
+  .funnel-video .frame {
+    position: relative; width: 100%; aspect-ratio: 16 / 9;
+    border-radius: 14px; overflow: hidden; background: #000;
+    box-shadow: 0 1px 4px rgba(122, 74, 0, 0.13);
+  }
+  .funnel-video iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; display: block; }
+  .funnel-video p { margin-top: 7px; font-size: 13.5px; font-weight: 700; color: #7A4A00; text-align: center; }
+
   /* 카테고리 탭 */
   .tabs { display: flex; gap: 6px; padding: 12px 12px 0; flex-wrap: wrap; }
   .tabs button {
@@ -88,6 +98,13 @@
   <div class="head">
     <h1><span class="accent">세 마리</span>가 골라 본 인기 상품 모아보기</h1>
     <p class="guide">세 마리가 골라 본 반려묘·반려견 용품부터 생활 인기 상품까지, 여기에 모아 뒀습니다. 눌러서 쿠팡에서 보세요.</p>
+  </div>
+
+  <div class="funnel-video">
+    <div class="frame">
+      <iframe src="https://www.youtube.com/embed/PMSF3l81n2c" title="집사가 사료값 벌어오래요" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
+    </div>
+    <p>세 마리가 직접 전하는 이야기, 먼저 보고 가세요</p>
   </div>
 
   <div class="tabs" id="tabBar">

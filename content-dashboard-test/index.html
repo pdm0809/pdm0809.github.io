@@ -72,25 +72,40 @@
   .kpi .d{font-size:10px;color:var(--dim);margin-top:5px;line-height:1.45}
 
   /* 유튜브 채널 카드 — 전 채널 동일 양식 */
-  .yt-card .metrics{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:12px}
-  @media(min-width:560px){.yt-card .metrics{grid-template-columns:repeat(4,1fr)}}
-  .m{background:var(--well);border:1px solid var(--line);border-radius:12px;padding:10px 11px;min-height:74px}
-  .fl{font-size:11px;color:var(--sub);font-weight:600}
-  .m .fv{font-size:20px;font-weight:800;letter-spacing:-.5px;margin-top:4px;line-height:1.15}
-  .m .fv small{font-size:11.5px;color:var(--sub);font-weight:700;margin-left:2px}
-  .m .fv.na{font-size:15px}
-  .m .fd{font-size:10px;color:var(--dim);margin-top:4px}
-  .blk{margin-top:12px;background:var(--well);border:1px solid var(--line);border-radius:12px;padding:10px 11px}
+  .yt-card{padding:16px 15px 14px;margin-bottom:12px}
+  .yt-card .card-h{gap:6px 8px}
+  .yt-card .card-h h3{font-size:16px}
+  .yt-card .handle{align-self:baseline}
+  .gnote{margin:-4px 2px 12px;font-size:11px;color:var(--dim);line-height:1.55;padding:7px 10px;border-left:2px solid var(--line2);background:var(--well);border-radius:0 8px 8px 0}
+  /* 지표 7종: 모바일 2열(마지막 1개 전폭) → 560px↑ 12분할(윗줄 4개·아랫줄 3개 균형) */
+  .yt-card .metrics{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:13px}
+  @media(max-width:559px){.yt-card .metrics .m:last-child:nth-child(odd){grid-column:1 / -1}}
+  @media(min-width:560px){
+    .yt-card .metrics{grid-template-columns:repeat(12,1fr)}
+    .yt-card .metrics .m{grid-column:span 3}
+    .yt-card .metrics .m:nth-child(n+5){grid-column:span 4}
+  }
+  .m{background:var(--well);border:1px solid var(--line);border-radius:12px;padding:10px 11px 9px;min-height:78px;display:flex;flex-direction:column}
+  .fl{font-size:11px;color:var(--sub);font-weight:600;letter-spacing:-.1px}
+  .m .fl{font-size:10.5px;color:var(--dim);font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .m .fv{font-size:19px;font-weight:800;letter-spacing:-.5px;margin-top:5px;line-height:1.15;color:var(--text);white-space:nowrap}
+  .m .fv small{font-size:11px;color:var(--sub);font-weight:700;margin-left:2px}
+  .m .fv.na{font-size:14px;color:var(--mute)}
+  .m .fd{font-size:10px;color:var(--dim);margin-top:auto;padding-top:4px}
+  .blk{margin-top:10px;background:var(--well);border:1px solid var(--line);border-radius:12px;padding:10px 11px 6px}
   .blk-h{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:6px}
+  .blk-h .fl{font-size:10.5px;color:var(--dim);font-weight:700}
   .blk-h .fd{font-size:10px;color:var(--dim)}
   .vt{width:100%;border-collapse:collapse;table-layout:fixed}
-  .vt th{font-size:10px;color:var(--dim);font-weight:600;text-align:right;padding:2px 0 5px}
+  .vt th{font-size:10px;color:var(--dim);font-weight:600;text-align:right;padding:2px 0 6px}
   .vt th:first-child{text-align:left}
-  .vt td{font-size:12.5px;padding:6px 0;border-top:1px solid var(--line);text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .vt td:first-child{text-align:left;padding-right:8px}
-  .vt td.na{font-size:11.5px}
+  .vt td{font-size:12.5px;line-height:1.35;padding:7px 0;border-top:1px solid var(--line);text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-variant-numeric:tabular-nums}
+  .vt td:first-child{text-align:left;padding-right:10px}
+  .vt td.num{font-weight:700}
+  .vt td.na{font-size:11px}
   .vt .rk{display:inline-block;width:17px;color:var(--accent);font-weight:800}
-  .vt col.c-t{width:auto} .vt col.c-v{width:56px} .vt col.c-l{width:46px} .vt col.c-c{width:40px}
+  .vt col.c-t{width:auto} .vt col.c-v{width:62px} .vt col.c-l{width:50px} .vt col.c-c{width:42px}
+  .vt.full tbody tr:nth-child(even) td{background:rgba(255,255,255,.015)}
   .spark-box{height:46px;display:flex;align-items:center;justify-content:center;border-radius:8px}
   .spark-box.empty{border:1px dashed var(--line2);font-size:11px;color:var(--mute);font-weight:700}
   svg.sparkline{width:100%;height:46px;display:block}
@@ -162,16 +177,16 @@ const GAS_URL = 'https://script.google.com/macros/s/AKfycbwMQhuzThtxDBSK2HPWgS9K
 const SHEET_ID = '1PTzAlBa7fzncrk1TM80jJFKolvjjiBficXS1fQa-yt4';
 const TABS = ['channel_daily','video_daily','blog_daily','project_status','manual_metrics'];
 
-// 유튜브 5채널 — 카드 양식은 전부 YT_FIELDS 하나로 렌더한다 (채널별 분기 없음)
+// 유튜브 4채널 — 카드 양식은 전부 YT_FIELDS 하나로 렌더한다 (채널별 분기 없음)
 const YT = [
   { id: 'UCmvGKGm4f1Fv4FSa_dREtJg', name: '지잡대TV',     handle: '@지잡대TV',          mm: 'jijabdae' },
   { id: 'UCvjWoQLgLysfLDW-KUdYl3w', name: '스토리스피커', handle: '@storyspeaker_kr',   mm: 'storyspeaker' },
-  { id: '@PearlineMae',             name: '새벽바다',     handle: '@PearlineMae',       mm: 'saebyeokbada' },
-  { id: 'UC3eTpLaL2U0cQeu1BVmDwwg', name: 'Music Atlas',  handle: '@MusicAtlasOfficial', mm: 'music_atlas' },
-  { id: 'UCrIurwPHzIsbq3I2ymFa46w', name: '대광',         handle: '판매 채널',          mm: 'daegwang' }
+  { id: 'UCrIurwPHzIsbq3I2ymFa46w', name: '새벽바다',     handle: '@PearlineMae',       mm: 'saebyeokbada' },
+  { id: 'UC3eTpLaL2U0cQeu1BVmDwwg', name: 'Music Atlas',  handle: '@MusicAtlasOfficial', mm: 'music_atlas' }
 ];
 const NA = '미수집';
 const M28_VIEWS = '최근 28일 조회수', M28_HOURS = '최근 28일 시청 시간(시간)';
+const M_MONTHLY = '월간 시청자(명)', M_KR = '시청자 지역 대한민국(%)', M_48H = '실시간 48시간 조회수';
 
 const isNum = v => v !== '' && v !== null && v !== undefined && !isNaN(Number(v));
 const fmt = n => isNum(n) ? Number(n).toLocaleString('ko-KR') : null;
@@ -280,9 +295,18 @@ function top3Rows(videos, chId){
   return { date: latest, rows };
 }
 
+// 채널 최신 스냅샷의 조회수 실측 영상 전체 (조회수 내림차순)
+function channelVideos(videos, chId){
+  const t = videos.filter(v => v.channel_id === chId && isNum(v.views));
+  const dt = t.map(v => String(v.date)).sort().pop();
+  return t.filter(v => String(v.date) === dt).sort((a, b) => Number(b.views) - Number(a.views));
+}
+const VT_HEAD = '<colgroup><col class="c-t"><col class="c-v"><col class="c-l"><col class="c-c"></colgroup><thead><tr><th>제목</th><th>조회수</th><th>좋아요</th><th>댓글</th></tr></thead>';
+const vtCell = x => isNum(x) ? '<td class="num">' + fmt(x) + '</td>' : '<td class="na">' + NA + '</td>';
+
 // ---------- 유튜브 채널 카드 ----------
 // 공통 필드셋: 순서·라벨·레이아웃 고정. 값이 없으면 필드를 빼지 않고 '미수집'으로 채운다.
-const YT_FIELDS = ['구독자', '영상 수', '최근 28일 조회수', '28일 시청 시간', '최근 영상 TOP3', '구독자 추이', '출처·기준일'];
+const YT_FIELDS = ['구독자', '영상 수', '최근 28일 조회수', '28일 시청 시간', '월간 시청자', '시청자 한국 비중', '최근 48시간 조회수', '최근 영상 TOP3', '구독자 추이', '출처·기준일'];
 
 function metricBox(label, valueHtml, dateText){
   return '<div class="m" data-field="' + esc(label) + '"><div class="fl">' + esc(label) + '</div>' +
@@ -296,6 +320,7 @@ function ytCard(d, ch, mm){
   const vcRow = d.channel_daily.filter(r => r.channel_id === ch.id && isNum(r.video_count))
                  .sort((a,b) => String(a.date).localeCompare(String(b.date))).pop() || null;
   const v28 = mrow(mm, ch.mm, M28_VIEWS), h28 = mrow(mm, ch.mm, M28_HOURS);
+  const mon = mrow(mm, ch.mm, M_MONTHLY), kr = mrow(mm, ch.mm, M_KR), h48 = mrow(mm, ch.mm, M_48H);
   const top = top3Rows(d.video_daily, ch.id);
 
   let h = '<article class="card yt-card" data-ch="' + esc(ch.id) + '">' +
@@ -305,22 +330,23 @@ function ytCard(d, ch, mm){
       metricBox(YT_FIELDS[1], vcRow ? fmt(vcRow.video_count) + '<small>편</small>' : null, vcRow && vcRow.date) +
       metricBox(YT_FIELDS[2], mHtml(v28, '회'), mdate(mm, ch.mm, M28_VIEWS)) +
       metricBox(YT_FIELDS[3], mHtml(h28, '시간'), mdate(mm, ch.mm, M28_HOURS)) +
+      metricBox(YT_FIELDS[4], mHtml(mon, '명'), mdate(mm, ch.mm, M_MONTHLY)) +
+      metricBox(YT_FIELDS[5], kr && isNum(kr.value) ? Number(kr.value) + '<small>%</small>' : null, mdate(mm, ch.mm, M_KR)) +
+      metricBox(YT_FIELDS[6], mHtml(h48, '회'), mdate(mm, ch.mm, M_48H)) +
     '</div>';
 
-  h += '<div class="blk" data-field="' + YT_FIELDS[4] + '"><div class="blk-h"><span class="fl">' + YT_FIELDS[4] + '</span>' +
+  h += '<div class="blk" data-field="' + YT_FIELDS[7] + '"><div class="blk-h"><span class="fl">' + YT_FIELDS[7] + '</span>' +
        '<span class="fd">' + (top.date ? esc(top.date) + ' 스냅샷 · 조회수 순' : '실측 기록 없음') + '</span></div>' +
-       '<table class="vt"><colgroup><col class="c-t"><col class="c-v"><col class="c-l"><col class="c-c"></colgroup>' +
-       '<thead><tr><th>제목</th><th>조회수</th><th>좋아요</th><th>댓글</th></tr></thead><tbody>' +
+       '<table class="vt">' + VT_HEAD + '<tbody>' +
        top.rows.map((v, i) => {
-         const cell = x => isNum(x) ? '<td class="num">' + fmt(x) + '</td>' : '<td class="na">' + NA + '</td>';
          if (!v) return '<tr><td><span class="rk">' + (i+1) + '</span><span class="na">' + NA + '</span></td><td class="na">' + NA + '</td><td class="na">' + NA + '</td><td class="na">' + NA + '</td></tr>';
-         return '<tr><td title="' + esc(v.title) + '"><span class="rk">' + (i+1) + '</span>' + esc(v.title) + '</td>' + cell(v.views) + cell(v.likes) + cell(v.comments) + '</tr>';
+         return '<tr><td title="' + esc(v.title) + '"><span class="rk">' + (i+1) + '</span>' + esc(v.title) + '</td>' + vtCell(v.views) + vtCell(v.likes) + vtCell(v.comments) + '</tr>';
        }).join('') + '</tbody></table></div>';
 
-  h += '<div class="blk" data-field="' + YT_FIELDS[5] + '"><div class="blk-h"><span class="fl">' + YT_FIELDS[5] + '</span>' +
+  h += '<div class="blk" data-field="' + YT_FIELDS[8] + '"><div class="blk-h"><span class="fl">' + YT_FIELDS[8] + '</span>' +
        '<span class="fd">' + (series.length >= 2 ? '최근 ' + Math.min(series.length, 30) + '회 실측' : '') + '</span></div>' + sparkHtml(series) + '</div>';
 
-  h += '<div class="yt-src" data-field="' + YT_FIELDS[6] + '"><span class="fl">' + YT_FIELDS[6] + '</span>' +
+  h += '<div class="yt-src" data-field="' + YT_FIELDS[9] + '"><span class="fl">' + YT_FIELDS[9] + '</span>' +
        (latest ? esc(latest.source || NA) + ' · 기준일 ' + esc(latest.date) : NA) +
        (v28 || h28 ? ' · 28일 지표 ' + esc((v28 || h28).note || '') : '') + '</div></article>';
   return h;
@@ -361,27 +387,23 @@ function render(d){
       '<div class="kpi"><div class="k">확인된 수익 (쿠팡)</div><div class="v num">' + (cpRev && isNum(cpRev.value) ? '₩' + fmt(cpRev.value) : naHtml()) + '</div><div class="d">' + (cpRev ? esc(cpRev.checked_at || cpRev.date) + ' 수동 확인' : '') + '</div></div>' +
     '</div>';
 
-  // 2. 유튜브 5채널 (통일 양식)
-  h += '<div class="group" id="s-yt"><h2>유튜브</h2><span class="gsub">5채널 · 동일 양식</span></div>';
+  // 2. 유튜브 4채널 (통일 양식)
+  h += '<div class="group" id="s-yt"><h2>유튜브</h2><span class="gsub">' + YT.length + '채널 · 동일 양식</span></div>' +
+    '<div class="gnote">대광은 별도 유튜브 채널이 없습니다 — 구 채널이 새벽바다로 통합됐습니다.</div>';
   h += YT.map(ch => ytCard(d, ch, mm)).join('');
 
-  // 2-1. 지잡대 상세 분석 (채널 카드 본체와 분리)
-  const JJ = YT[0];
-  const det = [['월간 시청자(명)', '월간 시청자', '명'], ['시청자 지역 대한민국(%)', '시청자 한국 비중', '%'], ['실시간 48시간 조회수', '최근 48시간 조회수', '회']];
-  const jjVideos = (() => { const t = d.video_daily.filter(v => v.channel_id === JJ.id && isNum(v.views)); const dt = t.map(v => String(v.date)).sort().pop(); return t.filter(v => String(v.date) === dt).sort((a,b) => Number(b.views) - Number(a.views)); })();
-  h += '<div class="card" id="s-jjdetail"><div class="card-h"><h3>지잡대 상세 분석</h3><span class="chip">Studio 실측</span></div>' +
-    '<div class="stats">' + det.map(([metric, label, unit]) => {
-      const r = mrow(mm, 'jijabdae', metric);
-      const v = r && isNum(r.value) ? (unit === '%' ? Number(r.value) + '<small>%</small>' : mHtml(r, unit)) : null;
-      return '<div class="stat"><div class="k">' + label + '</div><div class="v num">' + (v === null ? naHtml() : v) + '</div><div class="fd" style="font-size:10px;color:var(--dim);margin-top:3px">' + (r ? esc(r.checked_at || r.date) : '') + '</div></div>';
-    }).join('') + '</div>' +
-    (jjVideos.length ? '<div class="blk"><div class="blk-h"><span class="fl">영상별 실측 전체 (' + jjVideos.length + '편)</span><span class="fd">' + esc(jjVideos[0].date) + ' 스냅샷</span></div>' +
-      '<table class="vt"><colgroup><col class="c-t"><col class="c-v"><col class="c-l"><col class="c-c"></colgroup><thead><tr><th>제목</th><th>조회수</th><th>좋아요</th><th>댓글</th></tr></thead><tbody>' +
-      jjVideos.map(v => '<tr><td title="' + esc(v.title) + '">' + esc(v.title) + '</td><td class="num">' + fmt(v.views) + '</td>' +
-        (isNum(v.likes) ? '<td class="num">' + fmt(v.likes) + '</td>' : '<td class="na">' + NA + '</td>') +
-        (isNum(v.comments) ? '<td class="num">' + fmt(v.comments) + '</td>' : '<td class="na">' + NA + '</td>') + '</tr>').join('') +
-      '</tbody></table></div>' : '') +
-    '<div class="src">출처: jijabdae-analytics-watch 로그 (YouTube Studio 실측). 월간 시청자는 Studio의 만 단위 표기 그대로입니다. 댓글은 로그에 기록된 편만 표시합니다.</div></div>';
+  // 2-1. 영상별 실측 (전 채널 동일 구조)
+  h += '<div class="group" id="s-ytvid"><h2>영상별 실측</h2><span class="gsub">' + YT.length + '채널 · 최신 스냅샷 전체</span></div>';
+  h += YT.map(ch => {
+    const vids = channelVideos(d.video_daily, ch.id);
+    return '<article class="card yt-card" data-vid="' + esc(ch.id) + '"><div class="card-h"><h3>' + esc(ch.name) + ' 영상별 실측</h3><span class="chip ml">Studio 실측</span></div>' +
+      '<div class="blk"><div class="blk-h"><span class="fl">영상 ' + (vids.length ? vids.length + '편 · 조회수 순' : NA) + '</span><span class="fd">' + (vids.length ? esc(vids[0].date) + ' 스냅샷' : '실측 기록 없음') + '</span></div>' +
+      '<table class="vt full">' + VT_HEAD + '<tbody>' +
+      (vids.length ? vids.map(v => '<tr><td title="' + esc(v.title) + '">' + esc(v.title) + '</td>' + vtCell(v.views) + vtCell(v.likes) + vtCell(v.comments) + '</tr>').join('')
+                   : '<tr><td class="na">' + NA + '</td><td class="na">' + NA + '</td><td class="na">' + NA + '</td><td class="na">' + NA + '</td></tr>') +
+      '</tbody></table></div></article>';
+  }).join('') +
+    '<div class="src" style="margin:-2px 2px 0">출처: YouTube Studio 실측 (매일 21:30 수집). 좋아요·댓글은 최신 스냅샷 기준, 값이 없는 영상은 미수집으로 표시합니다.</div>';
 
   // 3. SNS
   const sns = [
@@ -453,7 +475,7 @@ function render(d){
       '<div class="row"><span class="dot' + (warnIds[p.project_id] ? ' warn' : '') + '"></span><div class="l"><div class="t">' + esc(p.name) + '</div><div class="s">' + esc(p.status_text) + (p.milestone ? ' · ' + esc(p.milestone) : '') + '</div></div><div class="r"><div class="d">' + esc(p.updated_at) + '</div></div></div>').join('') +
     '</div>';
 
-  h += '<div class="foot">수집: 매일 21:30 자동 (지잡대 Studio 분석 로그 · 스토리스피커 상태 파일 · 티스토리 공개 페이지). 인스타그램·Threads는 커넥터 조회값, 쿠팡·초대코드는 수동 확인분을 날짜와 함께 표시합니다. 수집이 빈 지표는 0이 아니라 미수집으로 표시합니다. 새벽바다·Music Atlas·대광의 구독자·조회수는 YouTube Data API 키가 생기면 매일 자동 수집됩니다.</div>';
+  h += '<div class="foot">수집: 매일 21:30 자동 (지잡대 Studio 분석 로그 · 스토리스피커 상태 파일 · 티스토리 공개 페이지). 인스타그램·Threads는 커넥터 조회값, 쿠팡·초대코드는 수동 확인분을 날짜와 함께 표시합니다. 수집이 빈 지표는 0이 아니라 미수집으로 표시합니다. 유튜브 4채널(지잡대TV·스토리스피커·새벽바다·Music Atlas)은 Studio 상세 지표와 영상별 실측을 매일 같은 기준으로 쌓습니다.</div>';
 
   document.getElementById('app').innerHTML = h;
 }

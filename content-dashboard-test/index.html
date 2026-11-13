@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>콘텐츠 현황판</title>
+<meta name="theme-color" content="#0e1116">
+<style>
+  :root{
+    --bg:#0e1116; --card:#171c26; --card2:#1d2432; --line:#262f42;
+    --text:#eef1f6; --sub:#9aa7bd; --dim:#5f6c84;
+    --up:#ff5d5d; --down:#4d7cff; --flat:#9aa7bd;
+    --accent:#ffd94d; --green:#3ddc84;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Malgun Gothic","Apple SD Gothic Neo",sans-serif;padding:16px 14px 40px;max-width:560px;margin:0 auto}
+  header{display:flex;justify-content:space-between;align-items:flex-end;padding:4px 2px 14px}
+  header h1{font-size:21px;font-weight:800;letter-spacing:-.5px}
+  header .upd{font-size:11px;color:var(--dim);text-align:right;line-height:1.5}
+  header .upd b{color:var(--sub);font-weight:600}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px}
+  .core .label{font-size:12px;color:var(--sub);margin-bottom:6px;display:flex;justify-content:space-between}
+  .core .num{font-size:30px;font-weight:800;letter-spacing:-1px;line-height:1.05}
+  .core .num small{font-size:14px;color:var(--sub);font-weight:600;margin-left:2px}
+  .delta{font-size:12px;font-weight:700;margin-left:6px;vertical-align:middle}
+  .delta.up{color:var(--up)} .delta.down{color:var(--down)} .delta.flat{color:var(--flat)}
+  .core .note{font-size:11px;color:var(--dim);margin-top:5px}
+  section{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:15px 14px;margin-bottom:12px}
+  section h2{font-size:15px;font-weight:800;margin-bottom:3px;display:flex;align-items:center;gap:7px}
+  section h2 .tag{font-size:10px;background:var(--card2);color:var(--sub);border:1px solid var(--line);padding:2px 7px;border-radius:20px;font-weight:600}
+  .src{font-size:10.5px;color:var(--dim);margin-top:10px;line-height:1.5}
+  .stats{display:flex;gap:16px;flex-wrap:wrap;margin:9px 0 4px}
+  .stat .k{font-size:11px;color:var(--dim)}
+  .stat .v{font-size:17px;font-weight:800;margin-top:1px}
+  .stat .v small{font-size:11px;color:var(--sub);font-weight:600}
+  .top3{margin-top:10px;border-top:1px solid var(--line);padding-top:10px}
+  .top3 .cap{font-size:11px;color:var(--sub);margin-bottom:7px;font-weight:700}
+  .trow{display:flex;align-items:center;gap:9px;padding:6px 0}
+  .trow .rank{width:20px;height:20px;border-radius:6px;background:var(--card2);border:1px solid var(--line);font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;color:var(--accent);flex:none}
+  .trow .ttl{flex:1;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .trow .vw{font-size:13px;font-weight:700;font-variant-numeric:tabular-nums}
+  .trow .lk{font-size:11px;color:var(--dim);width:64px;text-align:right;font-variant-numeric:tabular-nums}
+  .spark{margin-top:10px}
+  .spark .cap{font-size:11px;color:var(--sub);font-weight:700;margin-bottom:4px}
+  svg.sparkline{width:100%;height:44px;display:block}
+  .brow{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--line)}
+  .brow:last-child{border-bottom:none}
+  .brow .bk{font-size:13px;color:var(--sub)}
+  .brow .bv{font-size:14px;font-weight:700;text-align:right}
+  .brow .bv small{display:block;font-size:10.5px;color:var(--dim);font-weight:500;margin-top:1px}
+  .badge{font-size:10.5px;padding:2px 8px;border-radius:20px;font-weight:700}
+  .badge.warn{background:#3a2b12;color:var(--accent)}
+  .badge.ok{background:#123324;color:var(--green)}
+  .badge.mut{background:var(--card2);color:var(--sub)}
+  .prow{display:flex;gap:9px;padding:8px 0;border-bottom:1px solid var(--line);align-items:flex-start}
+  .prow:last-child{border-bottom:none}
+  .prow .dot{width:8px;height:8px;border-radius:50%;background:var(--green);margin-top:6px;flex:none}
+  .prow .dot.warn{background:var(--accent)}
+  .prow .pn{font-size:13px;font-weight:700}
+  .prow .ps{font-size:12px;color:var(--sub);line-height:1.5}
+  #err{display:none;background:#3a1620;border:1px solid #66222f;color:#ffb9c2;border-radius:12px;padding:12px 14px;font-size:13px;margin-bottom:12px;line-height:1.6}
+  .loading{color:var(--dim);font-size:13px;padding:30px 0;text-align:center}
+</style>
+</head>
+<body>
+<header>
+  <h1>콘텐츠 현황판</h1>
+  <div class="upd">최종 수집<br><b id="updTime">불러오는 중…</b></div>
+</header>
+<div id="err"></div>
+<div id="app"><div class="loading">지표를 불러오고 있습니다…</div></div>
+
+<script>
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbwMQhuzThtxDBSK2HPWgS9K06N8syfvotSN0rw-D12BWJrOhr-6vIWHd0iDfWRoiMh8eQ/exec';
+const SHEET_ID = '1PTzAlBa7fzncrk1TM80jJFKolvjjiBficXS1fQa-yt4';
+const TABS = ['channel_daily','video_daily','blog_daily','project_status','manual_metrics'];
+const CH_JIJABDAE = 'UCmvGKGm4f1Fv4FSa_dREtJg';
+const CH_STORY = 'UCvjWoQLgLysfLDW-KUdYl3w';
+
+const fmt = n => (n === '' || n === null || n === undefined || isNaN(n)) ? null : Number(n).toLocaleString('ko-KR');
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+async function loadFromGas(){
+  const r = await fetch(GAS_URL, { redirect:'follow' });
+  const t = await r.text();
+  const d = JSON.parse(t);
+  if (!d || !Array.isArray(d.channel_daily)) throw new Error('gas shape');
+  return d;
+}
+function parseGviz(text){
+  const m = text.match(/setResponse\(([\s\S]*)\)\s*;?\s*$/);
+  const j = JSON.parse(m[1]);
+  const cols = j.table.cols.map(c => c.label);
+  return (j.table.rows || []).map(row => {
+    const o = {};
+    cols.forEach((h, i) => {
+      const cell = row.c ? row.c[i] : null;
+      if (!cell || cell.v === null || cell.v === undefined) { o[h] = ''; return; }
+      let v = cell.v;
+      if (typeof v === 'string' && v.startsWith('Date(')) {
+        const p = v.slice(5, -1).split(',').map(Number);
+        const mm = String(p[1] + 1).padStart(2, '0'), dd = String(p[2]).padStart(2, '0');
+        v = p[0] + '-' + mm + '-' + dd;
+        if (p[3]) v += ' ' + String(p[3]).padStart(2,'0') + ':' + String(p[4]||0).padStart(2,'0');
+      }
+      o[h] = v;
+    });
+    return o;
+  }).filter(o => Object.values(o).some(v => v !== ''));
+}
+async function loadFromSheet(){
+  const out = { generated_at: '' };
+  for (const tab of TABS) {
+    const r = await fetch('https://docs.google.com/spreadsheets/d/' + SHEET_ID + '/gviz/tq?tqx=out:json&sheet=' + tab);
+    out[tab] = parseGviz(await r.text());
+  }
+  return out;
+}
+
+function latestBy(rows, key){
+  const map = {};
+  rows.forEach(r => { map[r[key]] = map[r[key]] ? (String(r.date) > String(map[r[key]].date) ? r : map[r[key]]) : r; });
+  return map;
+}
+function deltaOf(rows, channelId){
+  const rs = rows.filter(r => r.channel_id === channelId).slice().sort((a,b) => String(a.date).localeCompare(String(b.date)));
+  if (rs.length < 2) return null;
+  const d = Number(rs[rs.length-1].subscribers) - Number(rs[rs.length-2].subscribers);
+  return isNaN(d) ? null : d;
+}
+function deltaHtml(d){
+  if (d === null) return '';
+  if (d > 0) return '<span class="delta up">▲' + d + '</span>';
+  if (d < 0) return '<span class="delta down">▼' + Math.abs(d) + '</span>';
+  return '<span class="delta flat">— 0</span>';
+}
+function sparkline(rows, channelId){
+  const rs = rows.filter(r => r.channel_id === channelId).slice().sort((a,b) => String(a.date).localeCompare(String(b.date))).slice(-30);
+  if (!rs.length) return '';
+  const vals = rs.map(r => Number(r.subscribers) || 0);
+  const min = Math.min(...vals), max = Math.max(...vals), span = (max - min) || 1;
+  const W = 300, H = 44, P = 4;
+  const pts = vals.map((v, i) => {
+    const x = vals.length === 1 ? W/2 : P + (W - 2*P) * i / (vals.length - 1);
+    const y = H - P - (H - 2*P) * (v - min) / span;
+    return x.toFixed(1) + ',' + y.toFixed(1);
+  }).join(' ');
+  const last = pts.split(' ').pop().split(',');
+  return '<div class="spark"><div class="cap">구독자 추이 (최근 ' + rs.length + '회 수집)</div>' +
+    '<svg class="sparkline" viewBox="0 0 ' + W + ' ' + H + '" preserveAspectRatio="none">' +
+    '<polyline points="' + pts + '" fill="none" stroke="#ffd94d" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>' +
+    '<circle cx="' + last[0] + '" cy="' + last[1] + '" r="3" fill="#ffd94d"/></svg></div>';
+}
+function top3Html(videos, channelId){
+  const dates = [...new Set(videos.filter(v => v.channel_id === channelId).map(v => String(v.date)))].sort();
+  if (!dates.length) return '';
+  const latest = dates[dates.length - 1];
+  const rs = videos.filter(v => v.channel_id === channelId && String(v.date) === latest)
+                   .sort((a, b) => (Number(b.views)||0) - (Number(a.views)||0)).slice(0, 3);
+  if (!rs.length) return '';
+  return '<div class="top3"><div class="cap">영상 TOP3 · 조회수 (' + esc(latest) + ' 기준)</div>' + rs.map((v, i) =>
+    '<div class="trow"><div class="rank">' + (i+1) + '</div><div class="ttl">' + esc(v.title) + '</div>' +
+    '<div class="lk">' + (fmt(v.likes) ? '♥ ' + fmt(v.likes) : '') + '</div>' +
+    '<div class="vw">' + (fmt(v.views) ?? '—') + '</div></div>').join('') + '</div>';
+}
+function channelSection(d, chId, name, tag){
+  const latest = latestBy(d.channel_daily, 'channel_id')[chId];
+  const manual = d.manual_metrics.filter(m => (m.project_id === 'jijabdae' && chId === CH_JIJABDAE));
+  const m28 = manual.find(m => String(m.metric).includes('28일 조회'));
+  const mHr = manual.find(m => String(m.metric).includes('시청 시간'));
+  if (!latest) return '<section><h2>' + esc(name) + ' <span class="tag">' + esc(tag) + '</span></h2><div class="src">아직 수집된 수치가 없습니다 — (미수집)</div></section>';
+  const subs = fmt(latest.subscribers), vids = fmt(latest.video_count);
+  return '<section><h2>' + esc(name) + ' <span class="tag">' + esc(tag) + '</span></h2>' +
+    '<div class="stats">' +
+      '<div class="stat"><div class="k">구독자</div><div class="v">' + (subs ?? '—') + deltaHtml(deltaOf(d.channel_daily, chId)) + '</div></div>' +
+      '<div class="stat"><div class="k">영상 수</div><div class="v">' + (vids ?? '—') + '</div></div>' +
+      (m28 ? '<div class="stat"><div class="k">최근 28일 조회</div><div class="v">' + fmt(m28.value) + '</div></div>' : '') +
+      (mHr ? '<div class="stat"><div class="k">28일 시청 시간</div><div class="v">' + fmt(mHr.value) + '<small> 시간</small></div></div>' : '') +
+    '</div>' +
+    top3Html(d.video_daily, chId) +
+    sparkline(d.channel_daily, chId) +
+    '<div class="src">출처: ' + esc(latest.source || '') + ' · 기준일 ' + esc(latest.date) + '</div></section>';
+}
+
+function render(d){
+  const chMap = latestBy(d.channel_daily, 'channel_id');
+  const jj = chMap[CH_JIJABDAE], st = chMap[CH_STORY];
+  const blogMap = latestBy(d.blog_daily, 'blog_id');
+  const tis = blogMap['tistory_editor41386'];
+  const statusMap = {};
+  d.project_status.forEach(p => statusMap[p.project_id] = p);
+  const coupangRev = d.manual_metrics.filter(m => m.project_id === 'coupang' && String(m.metric).includes('수익')).pop();
+  const lastCollected = d.channel_daily.map(r => String(r.collected_at || r.date)).sort().pop() || '';
+  document.getElementById('updTime').textContent = lastCollected || (d.generated_at || '—');
+
+  let h = '';
+  // 핵심 카드 2x2
+  h += '<div class="grid2">' +
+    '<div class="card core"><div class="label">지잡대TV 구독자</div><div class="num">' + (jj ? (fmt(jj.subscribers) ?? '—') : '—') + (jj ? deltaHtml(deltaOf(d.channel_daily, CH_JIJABDAE)) : '') + '</div><div class="note">' + (jj ? esc(jj.date) + ' 기준' : '미수집') + '</div></div>' +
+    '<div class="card core"><div class="label">스토리스피커 구독자</div><div class="num">' + (st ? (fmt(st.subscribers) ?? '—') : '—') + (st ? deltaHtml(deltaOf(d.channel_daily, CH_STORY)) : '') + '</div><div class="note">' + (st ? esc(st.date) + ' 기준' : '미수집') + '</div></div>' +
+    '<div class="card core"><div class="label">티스토리 글</div><div class="num">' + (tis ? (fmt(tis.posts_total) ?? '—') : '—') + '<small>편</small></div><div class="note">' + (tis ? esc(tis.date) + ' 실측' : '미수집') + '</div></div>' +
+    '<div class="card core"><div class="label">쿠팡 수익 (수동 확인)</div><div class="num">' + (coupangRev ? '₩' + (fmt(coupangRev.value) ?? '—') : '—') + '</div><div class="note">' + (coupangRev ? esc(coupangRev.checked_at) + ' 확인분' : '미수집') + '</div></div>' +
+  '</div>';
+
+  h += channelSection(d, CH_JIJABDAE, '지잡대TV', '유튜브');
+  h += channelSection(d, CH_STORY, '스토리스피커', '유튜브');
+
+  // 블로그·쿠팡
+  const ads = statusMap['adsense'], cp = statusMap['coupang'];
+  h += '<section><h2>블로그 · 쿠팡</h2>' +
+    '<div class="brow"><div class="bk">티스토리 (AI 부업 실험실)</div><div class="bv">' + (tis ? (fmt(tis.posts_total) ?? '—') + '편' : '—') + '<small>' + (tis ? esc(tis.date) + ' 기준' : '') + '</small></div></div>' +
+    '<div class="brow"><div class="bk">애드센스</div><div class="bv"><span class="badge warn">수정 요구</span><small>' + (ads ? esc(ads.milestone) : '') + '</small></div></div>' +
+    '<div class="brow"><div class="bk">네이버 블로그</div><div class="bv">—<small>방문자·글 수 미수집 (공식 API 없음)</small></div></div>' +
+    '<div class="brow"><div class="bk">쿠팡 파트너스</div><div class="bv"><span class="badge ok">승인·활성화</span><small>수익 ₩' + (coupangRev ? (fmt(coupangRev.value) ?? '—') : '—') + ' · ' + (coupangRev ? esc(coupangRev.checked_at) : '') + ' 수동 확인</small></div></div>' +
+    '<div class="src">쿠팡 실적은 자동 수집 금지 규칙에 따라 수동 확인분만, 확인 날짜와 함께 표시합니다.</div></section>';
+
+  // 프로젝트 상태
+  h += '<section><h2>프로젝트 상태</h2>' + d.project_status.map(p =>
+    '<div class="prow"><div class="dot' + (p.project_id === 'adsense' ? ' warn' : '') + '"></div><div><div class="pn">' + esc(p.name) + '</div><div class="ps">' + esc(p.status_text) + (p.milestone ? ' · ' + esc(p.milestone) : '') + '</div></div></div>').join('') +
+    '<div class="src">상태 기준일: 각 항목 ' + 'updated_at' + ' 참조 · 수집 시각 매일 21:30</div></section>';
+
+  document.getElementById('app').innerHTML = h;
+}
+
+(async () => {
+  let d = null, gasErr = null;
+  try { d = await loadFromGas(); } catch (e) { gasErr = e; }
+  if (!d) {
+    try { d = await loadFromSheet(); }
+    catch (e) {
+      const el = document.getElementById('err');
+      el.style.display = 'block';
+      el.textContent = '지표를 불러오지 못했습니다. 잠시 후 새로고침해 주세요.';
+      document.getElementById('app').innerHTML = '';
+      return;
+    }
+    const el = document.getElementById('err');
+    el.style.display = 'block';
+    el.style.background = '#2c2410'; el.style.borderColor = '#5c4a16'; el.style.color = '#ffe08a';
+    el.textContent = '지금은 시트 직접 통로로 표시 중입니다 (GAS 통로는 소유자 최초 승인 후 자동 전환).';
+  }
+  render(d);
+})();
+</script>
+</body>
+</html>

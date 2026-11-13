@@ -10,46 +10,56 @@
     --bg:#0e1116; --card:#171c26; --card2:#1d2432; --line:#262f42;
     --text:#eef1f6; --sub:#9aa7bd; --dim:#5f6c84;
     --up:#ff5d5d; --down:#4d7cff; --flat:#9aa7bd;
-    --accent:#ffd94d; --green:#3ddc84;
+    --accent:#ffd94d; --green:#3ddc84; --pink:#ff7ab8; --cyan:#4dd8ff;
   }
   *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-  body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Malgun Gothic","Apple SD Gothic Neo",sans-serif;padding:16px 14px 40px;max-width:560px;margin:0 auto}
-  header{display:flex;justify-content:space-between;align-items:flex-end;padding:4px 2px 14px}
-  header h1{font-size:21px;font-weight:800;letter-spacing:-.5px}
+  body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Malgun Gothic","Apple SD Gothic Neo",sans-serif;padding:16px 14px 44px;max-width:620px;margin:0 auto}
+  header{display:flex;justify-content:space-between;align-items:flex-end;padding:4px 2px 12px}
+  header h1{font-size:22px;font-weight:800;letter-spacing:-.5px}
   header .upd{font-size:11px;color:var(--dim);text-align:right;line-height:1.5}
   header .upd b{color:var(--sub);font-weight:600}
-  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+  .group{font-size:12px;font-weight:800;color:var(--sub);letter-spacing:2px;margin:20px 2px 9px;display:flex;align-items:center;gap:8px}
+  .group::after{content:'';flex:1;height:1px;background:var(--line)}
+  .group:first-of-type{margin-top:4px}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  @media(min-width:560px){.grid2{grid-template-columns:repeat(4,1fr)}}
   .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px}
-  .core .label{font-size:12px;color:var(--sub);margin-bottom:6px;display:flex;justify-content:space-between}
-  .core .num{font-size:30px;font-weight:800;letter-spacing:-1px;line-height:1.05}
-  .core .num small{font-size:14px;color:var(--sub);font-weight:600;margin-left:2px}
-  .delta{font-size:12px;font-weight:700;margin-left:6px;vertical-align:middle}
+  .core .label{font-size:11.5px;color:var(--sub);margin-bottom:6px}
+  .core .num{font-size:27px;font-weight:800;letter-spacing:-1px;line-height:1.05}
+  .core .num small{font-size:13px;color:var(--sub);font-weight:600;margin-left:2px}
+  .delta{font-size:12px;font-weight:700;margin-left:5px;vertical-align:middle}
   .delta.up{color:var(--up)} .delta.down{color:var(--down)} .delta.flat{color:var(--flat)}
-  .core .note{font-size:11px;color:var(--dim);margin-top:5px}
-  section{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:15px 14px;margin-bottom:12px}
-  section h2{font-size:15px;font-weight:800;margin-bottom:3px;display:flex;align-items:center;gap:7px}
+  .core .note{font-size:10.5px;color:var(--dim);margin-top:5px}
+  section{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:15px 14px;margin-bottom:10px}
+  section h2{font-size:15px;font-weight:800;margin-bottom:2px;display:flex;align-items:center;gap:7px;flex-wrap:wrap}
   section h2 .tag{font-size:10px;background:var(--card2);color:var(--sub);border:1px solid var(--line);padding:2px 7px;border-radius:20px;font-weight:600}
-  .src{font-size:10.5px;color:var(--dim);margin-top:10px;line-height:1.5}
-  .stats{display:flex;gap:16px;flex-wrap:wrap;margin:9px 0 4px}
-  .stat .k{font-size:11px;color:var(--dim)}
-  .stat .v{font-size:17px;font-weight:800;margin-top:1px}
+  section h2 .tag.yt{color:#ff8a8a} section h2 .tag.ig{color:var(--pink)} section h2 .tag.tt{color:var(--cyan)}
+  .src{font-size:10.5px;color:var(--dim);margin-top:10px;line-height:1.55}
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(78px,1fr));gap:10px 8px;margin:10px 0 2px}
+  .stat .k{font-size:10.5px;color:var(--dim)}
+  .stat .v{font-size:18px;font-weight:800;margin-top:1px;font-variant-numeric:tabular-nums}
   .stat .v small{font-size:11px;color:var(--sub);font-weight:600}
-  .top3{margin-top:10px;border-top:1px solid var(--line);padding-top:10px}
-  .top3 .cap{font-size:11px;color:var(--sub);margin-bottom:7px;font-weight:700}
-  .trow{display:flex;align-items:center;gap:9px;padding:6px 0}
+  .stat.hero .v{font-size:24px;color:var(--accent)}
+  .top3{margin-top:11px;border-top:1px solid var(--line);padding-top:10px}
+  .cap{font-size:11px;color:var(--sub);margin-bottom:7px;font-weight:700}
+  .trow{display:flex;align-items:center;gap:9px;padding:5px 0}
   .trow .rank{width:20px;height:20px;border-radius:6px;background:var(--card2);border:1px solid var(--line);font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;color:var(--accent);flex:none}
   .trow .ttl{flex:1;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .trow .vw{font-size:13px;font-weight:700;font-variant-numeric:tabular-nums}
-  .trow .lk{font-size:11px;color:var(--dim);width:64px;text-align:right;font-variant-numeric:tabular-nums}
+  .trow .lk{font-size:11px;color:var(--dim);min-width:58px;text-align:right;font-variant-numeric:tabular-nums}
+  .recent{margin-top:11px;border-top:1px solid var(--line);padding-top:10px}
+  .rrow{display:flex;justify-content:space-between;gap:10px;padding:5px 0;font-size:12.5px}
+  .rrow .rt{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .rrow .rd{color:var(--dim);font-size:11px;flex:none}
   .spark{margin-top:10px}
-  .spark .cap{font-size:11px;color:var(--sub);font-weight:700;margin-bottom:4px}
   svg.sparkline{width:100%;height:44px;display:block}
-  .brow{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--line)}
+  .brow{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--line)}
   .brow:last-child{border-bottom:none}
-  .brow .bk{font-size:13px;color:var(--sub)}
-  .brow .bv{font-size:14px;font-weight:700;text-align:right}
+  .brow .bk{font-size:13px}
+  .brow .bk small{display:block;font-size:11px;color:var(--dim);margin-top:1px}
+  .brow .bv{font-size:13.5px;font-weight:700;text-align:right;font-variant-numeric:tabular-nums}
   .brow .bv small{display:block;font-size:10.5px;color:var(--dim);font-weight:500;margin-top:1px}
-  .badge{font-size:10.5px;padding:2px 8px;border-radius:20px;font-weight:700}
+  .badge{font-size:10.5px;padding:2px 8px;border-radius:20px;font-weight:700;white-space:nowrap}
   .badge.warn{background:#3a2b12;color:var(--accent)}
   .badge.ok{background:#123324;color:var(--green)}
   .badge.mut{background:var(--card2);color:var(--sub)}
@@ -59,8 +69,13 @@
   .prow .dot.warn{background:var(--accent)}
   .prow .pn{font-size:13px;font-weight:700}
   .prow .ps{font-size:12px;color:var(--sub);line-height:1.5}
+  .prow .pd{font-size:10.5px;color:var(--dim);margin-left:auto;flex:none;padding-top:2px}
+  .bar{height:7px;background:var(--card2);border-radius:5px;overflow:hidden;margin-top:9px}
+  .bar i{display:block;height:100%;background:var(--green);border-radius:5px}
+  .bigcode{font-size:24px;font-weight:800;letter-spacing:2px;color:var(--accent)}
   #err{display:none;background:#3a1620;border:1px solid #66222f;color:#ffb9c2;border-radius:12px;padding:12px 14px;font-size:13px;margin-bottom:12px;line-height:1.6}
   .loading{color:var(--dim);font-size:13px;padding:30px 0;text-align:center}
+  .foot{font-size:10.5px;color:var(--dim);line-height:1.7;margin-top:16px;padding:0 2px}
 </style>
 </head>
 <body>
@@ -75,16 +90,20 @@
 const GAS_URL = 'https://script.google.com/macros/s/AKfycbwMQhuzThtxDBSK2HPWgS9K06N8syfvotSN0rw-D12BWJrOhr-6vIWHd0iDfWRoiMh8eQ/exec';
 const SHEET_ID = '1PTzAlBa7fzncrk1TM80jJFKolvjjiBficXS1fQa-yt4';
 const TABS = ['channel_daily','video_daily','blog_daily','project_status','manual_metrics'];
-const CH_JIJABDAE = 'UCmvGKGm4f1Fv4FSa_dREtJg';
-const CH_STORY = 'UCvjWoQLgLysfLDW-KUdYl3w';
+const CH = {
+  jijabdae: 'UCmvGKGm4f1Fv4FSa_dREtJg',
+  story: 'UCvjWoQLgLysfLDW-KUdYl3w',
+  saebyeok: '@PearlineMae',
+  atlas: 'UC3eTpLaL2U0cQeu1BVmDwwg',
+  daegwang: 'UCrIurwPHzIsbq3I2ymFa46w'
+};
 
 const fmt = n => (n === '' || n === null || n === undefined || isNaN(n)) ? null : Number(n).toLocaleString('ko-KR');
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
 async function loadFromGas(){
   const r = await fetch(GAS_URL, { redirect:'follow' });
-  const t = await r.text();
-  const d = JSON.parse(t);
+  const d = JSON.parse(await r.text());
   if (!d || !Array.isArray(d.channel_daily)) throw new Error('gas shape');
   return d;
 }
@@ -100,8 +119,7 @@ function parseGviz(text){
       let v = cell.v;
       if (typeof v === 'string' && v.startsWith('Date(')) {
         const p = v.slice(5, -1).split(',').map(Number);
-        const mm = String(p[1] + 1).padStart(2, '0'), dd = String(p[2]).padStart(2, '0');
-        v = p[0] + '-' + mm + '-' + dd;
+        v = p[0] + '-' + String(p[1] + 1).padStart(2, '0') + '-' + String(p[2]).padStart(2, '0');
         if (p[3]) v += ' ' + String(p[3]).padStart(2,'0') + ':' + String(p[4]||0).padStart(2,'0');
       }
       o[h] = v;
@@ -120,11 +138,25 @@ async function loadFromSheet(){
 
 function latestBy(rows, key){
   const map = {};
-  rows.forEach(r => { map[r[key]] = map[r[key]] ? (String(r.date) > String(map[r[key]].date) ? r : map[r[key]]) : r; });
+  rows.forEach(r => { if (r[key] !== '' && (!map[r[key]] || String(r.date) >= String(map[r[key]].date))) map[r[key]] = r; });
   return map;
 }
+function manualMap(rows){
+  const map = {};
+  rows.forEach(r => {
+    if (!r.project_id || !r.metric) return;
+    map[r.project_id] = map[r.project_id] || {};
+    const cur = map[r.project_id][r.metric];
+    if (!cur || String(r.date) >= String(cur.date)) map[r.project_id][r.metric] = r;
+  });
+  return map;
+}
+const mv = (mm, proj, metric) => { const r = mm[proj] && mm[proj][metric]; return r ? r.value : null; };
+const mc = (mm, proj, metric) => { const r = mm[proj] && mm[proj][metric]; return r ? (r.checked_at || r.date || '') : ''; };
+
 function deltaOf(rows, channelId){
-  const rs = rows.filter(r => r.channel_id === channelId).slice().sort((a,b) => String(a.date).localeCompare(String(b.date)));
+  const rs = rows.filter(r => r.channel_id === channelId && r.subscribers !== '' && !isNaN(Number(r.subscribers)))
+                 .slice().sort((a,b) => String(a.date).localeCompare(String(b.date)));
   if (rs.length < 2) return null;
   const d = Number(rs[rs.length-1].subscribers) - Number(rs[rs.length-2].subscribers);
   return isNaN(d) ? null : d;
@@ -136,16 +168,13 @@ function deltaHtml(d){
   return '<span class="delta flat">— 0</span>';
 }
 function sparkline(rows, channelId){
-  const rs = rows.filter(r => r.channel_id === channelId).slice().sort((a,b) => String(a.date).localeCompare(String(b.date))).slice(-30);
-  if (!rs.length) return '';
+  const rs = rows.filter(r => r.channel_id === channelId && r.subscribers !== '')
+                 .slice().sort((a,b) => String(a.date).localeCompare(String(b.date))).slice(-30);
+  if (rs.length < 2) return '';
   const vals = rs.map(r => Number(r.subscribers) || 0);
   const min = Math.min(...vals), max = Math.max(...vals), span = (max - min) || 1;
   const W = 300, H = 44, P = 4;
-  const pts = vals.map((v, i) => {
-    const x = vals.length === 1 ? W/2 : P + (W - 2*P) * i / (vals.length - 1);
-    const y = H - P - (H - 2*P) * (v - min) / span;
-    return x.toFixed(1) + ',' + y.toFixed(1);
-  }).join(' ');
+  const pts = vals.map((v, i) => (P + (W - 2*P) * i / (vals.length - 1)).toFixed(1) + ',' + (H - P - (H - 2*P) * (v - min) / span).toFixed(1)).join(' ');
   const last = pts.split(' ').pop().split(',');
   return '<div class="spark"><div class="cap">구독자 추이 (최근 ' + rs.length + '회 수집)</div>' +
     '<svg class="sparkline" viewBox="0 0 ' + W + ' ' + H + '" preserveAspectRatio="none">' +
@@ -153,79 +182,147 @@ function sparkline(rows, channelId){
     '<circle cx="' + last[0] + '" cy="' + last[1] + '" r="3" fill="#ffd94d"/></svg></div>';
 }
 function top3Html(videos, channelId){
-  const dates = [...new Set(videos.filter(v => v.channel_id === channelId).map(v => String(v.date)))].sort();
+  const dates = [...new Set(videos.filter(v => v.channel_id === channelId && v.views !== '' && !isNaN(Number(v.views))).map(v => String(v.date)))].sort();
   if (!dates.length) return '';
   const latest = dates[dates.length - 1];
-  const rs = videos.filter(v => v.channel_id === channelId && String(v.date) === latest)
+  const rs = videos.filter(v => v.channel_id === channelId && String(v.date) === latest && v.views !== '')
                    .sort((a, b) => (Number(b.views)||0) - (Number(a.views)||0)).slice(0, 3);
   if (!rs.length) return '';
   return '<div class="top3"><div class="cap">영상 TOP3 · 조회수 (' + esc(latest) + ' 기준)</div>' + rs.map((v, i) =>
     '<div class="trow"><div class="rank">' + (i+1) + '</div><div class="ttl">' + esc(v.title) + '</div>' +
-    '<div class="lk">' + (fmt(v.likes) ? '♥ ' + fmt(v.likes) : '') + '</div>' +
+    '<div class="lk">' + (fmt(v.likes) ? '♥ ' + fmt(v.likes) : '') + (fmt(v.comments) ? ' · 💬 ' + fmt(v.comments) : '') + '</div>' +
     '<div class="vw">' + (fmt(v.views) ?? '—') + '</div></div>').join('') + '</div>';
 }
-function channelSection(d, chId, name, tag){
+function recentHtml(videos, channelId){
+  const rs = videos.filter(v => v.channel_id === channelId && (v.views === '' || isNaN(Number(v.views))))
+                   .slice().sort((a, b) => String(b.published_at).localeCompare(String(a.published_at))).slice(0, 3);
+  if (!rs.length) return '';
+  return '<div class="recent"><div class="cap">최근 게시작 (조회수 미수집)</div>' + rs.map(v =>
+    '<div class="rrow"><div class="rt">' + esc(v.title) + '</div><div class="rd">' + esc(v.published_at) + '</div></div>').join('') + '</div>';
+}
+function statHtml(k, v, small, hero){
+  return '<div class="stat' + (hero ? ' hero' : '') + '"><div class="k">' + esc(k) + '</div><div class="v">' +
+    (v ?? '—') + (small ? '<small> ' + esc(small) + '</small>' : '') + '</div></div>';
+}
+function ytSection(d, chId, name, handle, extraStats){
   const latest = latestBy(d.channel_daily, 'channel_id')[chId];
-  const manual = d.manual_metrics.filter(m => (m.project_id === 'jijabdae' && chId === CH_JIJABDAE));
-  const m28 = manual.find(m => String(m.metric).includes('28일 조회'));
-  const mHr = manual.find(m => String(m.metric).includes('시청 시간'));
-  if (!latest) return '<section><h2>' + esc(name) + ' <span class="tag">' + esc(tag) + '</span></h2><div class="src">아직 수집된 수치가 없습니다 — (미수집)</div></section>';
-  const subs = fmt(latest.subscribers), vids = fmt(latest.video_count);
-  return '<section><h2>' + esc(name) + ' <span class="tag">' + esc(tag) + '</span></h2>' +
-    '<div class="stats">' +
-      '<div class="stat"><div class="k">구독자</div><div class="v">' + (subs ?? '—') + deltaHtml(deltaOf(d.channel_daily, chId)) + '</div></div>' +
-      '<div class="stat"><div class="k">영상 수</div><div class="v">' + (vids ?? '—') + '</div></div>' +
-      (m28 ? '<div class="stat"><div class="k">최근 28일 조회</div><div class="v">' + fmt(m28.value) + '</div></div>' : '') +
-      (mHr ? '<div class="stat"><div class="k">28일 시청 시간</div><div class="v">' + fmt(mHr.value) + '<small> 시간</small></div></div>' : '') +
-    '</div>' +
-    top3Html(d.video_daily, chId) +
-    sparkline(d.channel_daily, chId) +
-    '<div class="src">출처: ' + esc(latest.source || '') + ' · 기준일 ' + esc(latest.date) + '</div></section>';
+  const head = '<h2>' + esc(name) + ' <span class="tag yt">유튜브</span><span class="tag">' + esc(handle) + '</span></h2>';
+  if (!latest) return '<section>' + head + '<div class="src">아직 수집된 수치가 없습니다 — (미수집)</div></section>';
+  const hasSubs = latest.subscribers !== '' && !isNaN(Number(latest.subscribers));
+  let h = '<section>' + head + '<div class="stats">';
+  h += '<div class="stat hero"><div class="k">구독자</div><div class="v">' +
+       (hasSubs ? fmt(latest.subscribers) + deltaHtml(deltaOf(d.channel_daily, chId)) : '—') + '</div></div>';
+  if (latest.video_count !== '') h += statHtml('영상 수', fmt(latest.video_count));
+  extraStats.forEach(s => { if (s.v !== null && s.v !== '' && s.v !== undefined) h += statHtml(s.k, s.v, s.small); });
+  h += '</div>';
+  if (!hasSubs) h += '<div class="src">구독자는 실측 기록이 없어 미수집으로 표시합니다. YouTube Data API 키가 있으면 매일 자동 수집됩니다.</div>';
+  h += top3Html(d.video_daily, chId) + recentHtml(d.video_daily, chId) + sparkline(d.channel_daily, chId);
+  h += '<div class="src">출처: ' + esc(latest.source || '') + ' · 기준일 ' + esc(latest.date) + '</div></section>';
+  return h;
 }
 
 function render(d){
   const chMap = latestBy(d.channel_daily, 'channel_id');
-  const jj = chMap[CH_JIJABDAE], st = chMap[CH_STORY];
-  const blogMap = latestBy(d.blog_daily, 'blog_id');
-  const tis = blogMap['tistory_editor41386'];
+  const jj = chMap[CH.jijabdae], tis = latestBy(d.blog_daily, 'blog_id')['tistory_editor41386'];
+  const naver = latestBy(d.blog_daily, 'blog_id')['naver_pdm0809'];
+  const mm = manualMap(d.manual_metrics);
   const statusMap = {};
   d.project_status.forEach(p => statusMap[p.project_id] = p);
-  const coupangRev = d.manual_metrics.filter(m => m.project_id === 'coupang' && String(m.metric).includes('수익')).pop();
   const lastCollected = d.channel_daily.map(r => String(r.collected_at || r.date)).sort().pop() || '';
   document.getElementById('updTime').textContent = lastCollected || (d.generated_at || '—');
 
   let h = '';
-  // 핵심 카드 2x2
+  // 핵심 카드
+  const v28 = mv(mm, 'jijabdae', '최근 28일 조회수');
   h += '<div class="grid2">' +
-    '<div class="card core"><div class="label">지잡대TV 구독자</div><div class="num">' + (jj ? (fmt(jj.subscribers) ?? '—') : '—') + (jj ? deltaHtml(deltaOf(d.channel_daily, CH_JIJABDAE)) : '') + '</div><div class="note">' + (jj ? esc(jj.date) + ' 기준' : '미수집') + '</div></div>' +
-    '<div class="card core"><div class="label">스토리스피커 구독자</div><div class="num">' + (st ? (fmt(st.subscribers) ?? '—') : '—') + (st ? deltaHtml(deltaOf(d.channel_daily, CH_STORY)) : '') + '</div><div class="note">' + (st ? esc(st.date) + ' 기준' : '미수집') + '</div></div>' +
+    '<div class="card core"><div class="label">지잡대TV 구독자</div><div class="num">' + (jj && jj.subscribers !== '' ? fmt(jj.subscribers) : '—') + (jj ? deltaHtml(deltaOf(d.channel_daily, CH.jijabdae)) : '') + '</div><div class="note">' + (jj ? esc(jj.date) + ' 기준' : '미수집') + '</div></div>' +
+    '<div class="card core"><div class="label">스토리스피커 구독자</div><div class="num">' + (chMap[CH.story] && chMap[CH.story].subscribers !== '' ? fmt(chMap[CH.story].subscribers) : '—') + (chMap[CH.story] ? deltaHtml(deltaOf(d.channel_daily, CH.story)) : '') + '</div><div class="note">' + (chMap[CH.story] ? esc(chMap[CH.story].date) + ' 기준' : '미수집') + '</div></div>' +
+    '<div class="card core"><div class="label">지잡대 28일 조회</div><div class="num">' + (v28 !== null ? fmt(v28) : '—') + '</div><div class="note">' + (v28 !== null ? mc(mm, 'jijabdae', '최근 28일 조회수') + ' Studio 실측' : '미수집') + '</div></div>' +
     '<div class="card core"><div class="label">티스토리 글</div><div class="num">' + (tis ? (fmt(tis.posts_total) ?? '—') : '—') + '<small>편</small></div><div class="note">' + (tis ? esc(tis.date) + ' 실측' : '미수집') + '</div></div>' +
-    '<div class="card core"><div class="label">쿠팡 수익 (수동 확인)</div><div class="num">' + (coupangRev ? '₩' + (fmt(coupangRev.value) ?? '—') : '—') + '</div><div class="note">' + (coupangRev ? esc(coupangRev.checked_at) + ' 확인분' : '미수집') + '</div></div>' +
   '</div>';
 
-  h += channelSection(d, CH_JIJABDAE, '지잡대TV', '유튜브');
-  h += channelSection(d, CH_STORY, '스토리스피커', '유튜브');
+  // 유튜브
+  h += '<div class="group">유튜브</div>';
+  h += ytSection(d, CH.jijabdae, '지잡대TV', '@지잡대TV', [
+    { k: '최근 28일 조회', v: fmt(v28) },
+    { k: '28일 시청 시간', v: fmt(mv(mm, 'jijabdae', '최근 28일 시청 시간(시간)')), small: '시간' },
+    { k: '월간 시청자', v: fmt(mv(mm, 'jijabdae', '월간 시청자(명)')), small: '명' },
+    { k: '시청자 한국 비중', v: mv(mm, 'jijabdae', '시청자 지역 대한민국(%)') !== null ? mv(mm, 'jijabdae', '시청자 지역 대한민국(%)') + '%' : null },
+    { k: '48시간 조회', v: fmt(mv(mm, 'jijabdae', '실시간 48시간 조회수')) }
+  ]);
+  h += ytSection(d, CH.story, '스토리스피커', '@storyspeaker_kr', []);
+  h += ytSection(d, CH.saebyeok, '새벽바다', '@PearlineMae', []);
+  h += ytSection(d, CH.atlas, 'Music Atlas', '@MusicAtlasOfficial', []);
+  h += ytSection(d, CH.daegwang, '대광', '판매 채널', []);
 
-  // 블로그·쿠팡
-  const ads = statusMap['adsense'], cp = statusMap['coupang'];
-  h += '<section><h2>블로그 · 쿠팡</h2>' +
-    '<div class="brow"><div class="bk">티스토리 (AI 부업 실험실)</div><div class="bv">' + (tis ? (fmt(tis.posts_total) ?? '—') + '편' : '—') + '<small>' + (tis ? esc(tis.date) + ' 기준' : '') + '</small></div></div>' +
-    '<div class="brow"><div class="bk">애드센스</div><div class="bv"><span class="badge warn">수정 요구</span><small>' + (ads ? esc(ads.milestone) : '') + '</small></div></div>' +
-    '<div class="brow"><div class="bk">네이버 블로그</div><div class="bv">—<small>방문자·글 수 미수집 (공식 API 없음)</small></div></div>' +
-    '<div class="brow"><div class="bk">쿠팡 파트너스</div><div class="bv"><span class="badge ok">승인·활성화</span><small>수익 ₩' + (coupangRev ? (fmt(coupangRev.value) ?? '—') : '—') + ' · ' + (coupangRev ? esc(coupangRev.checked_at) : '') + ' 수동 확인</small></div></div>' +
-    '<div class="src">쿠팡 실적은 자동 수집 금지 규칙에 따라 수동 확인분만, 확인 날짜와 함께 표시합니다.</div></section>';
+  // SNS
+  const snsRow = (name, handle, tagCls, tagLabel, proj) => {
+    const f = mv(mm, proj, '팔로워'), p = mv(mm, proj, '게시물');
+    if (f === null && p === null) return '<div class="brow"><div class="bk">' + esc(name) + '<small>' + esc(handle) + '</small></div><div class="bv">—<small>미수집</small></div></div>';
+    return '<div class="brow"><div class="bk">' + esc(name) + ' <span class="badge mut">' + esc(tagLabel) + '</span><small>' + esc(handle) + '</small></div>' +
+      '<div class="bv">팔로워 ' + (fmt(f) ?? '—') + ' · 게시물 ' + (fmt(p) ?? '—') + '<small>' + mc(mm, proj, '팔로워') + ' 커넥터 조회</small></div></div>';
+  };
+  h += '<div class="group">SNS</div><section><h2>SNS 계정</h2>' +
+    snsRow('지잡대TV 인스타그램', '@leo_parkkkkk', 'ig', '인스타', 'insta_leo') +
+    snsRow('스토리스피커 인스타그램', '@storyspeaker_kr', 'ig', '인스타', 'insta_story') +
+    snsRow('대광 추천템 인스타그램', '@daegwang.shop · 판매릴스 전용', 'ig', '인스타', 'insta_daegwang') +
+    '<div class="brow"><div class="bk">스토리스피커 틱톡 <span class="badge mut">틱톡</span><small>@storyspeaker_kr · 지잡대 크로스포스팅 병행</small></div><div class="bv">개설·프로필 완료<small>팔로워 미수집 (앱 실측 시 갱신)</small></div></div>' +
+    snsRow('Threads', '@leo_parkkkkk · AI 부업 실험실', '', 'Threads', 'threads_leo') +
+    '<div class="src">인스타그램·Threads 수치는 커넥터 프로필 조회 원값입니다. 틱톡은 공식 조회 경로가 없어 상태만 표시합니다.</div></section>';
+
+  // 블로그
+  const ads = statusMap['adsense'];
+  h += '<div class="group">블로그</div><section><h2>블로그</h2>' +
+    '<div class="brow"><div class="bk">티스토리 (AI 부업 실험실)<small>editor41386.tistory.com</small></div><div class="bv">' + (tis ? (fmt(tis.posts_total) ?? '—') + '편' : '—') + '<small>' + (tis ? esc(tis.date) + ' 실측' : '') + '</small></div></div>' +
+    '<div class="brow"><div class="bk">애드센스</div><div class="bv"><span class="badge warn">수정 요구</span><small>' + (ads ? esc(ads.status_text) : '') + '</small></div></div>' +
+    '<div class="brow"><div class="bk">네이버 블로그 (잡다한 실험실)<small>blog.naver.com/pdm0809</small></div><div class="bv">' + (naver && naver.posts_total !== '' ? (fmt(naver.posts_total) ?? '—') + '편' : '—') + '<small>' + (naver ? esc(naver.date) + ' RSS 실측 · 이후 쇼핑커넥트 2편 발행 · 방문자는 공식 API 없어 미수집' : '미수집') + '</small></div></div>' +
+    '</section>';
+
+  // 수익
+  const cpClick = mv(mm, 'coupang', '클릭'), cpBuy = mv(mm, 'coupang', '구매'),
+        cpRev = mv(mm, 'coupang', '수익(원)'), cpCum = mv(mm, 'coupang', '누적 판매액(원)');
+  const cpPct = (cpCum !== null && Number(cpCum) > 0) ? Math.min(100, Number(cpCum) / 150000 * 100) : 0;
+  const scFee = mv(mm, 'shopping_connect', '건당 수수료 최고(원)'), scRecent = mv(mm, 'shopping_connect', '최근 발행(편)');
+  h += '<div class="group">수익</div>' +
+  '<section><h2>쿠팡 파트너스 <span class="badge warn">최종 승인 전</span></h2>' +
+    '<div class="stats">' +
+      statHtml('클릭', fmt(cpClick)) + statHtml('구매', fmt(cpBuy)) +
+      statHtml('수익', cpRev !== null ? '₩' + fmt(cpRev) : null) +
+      statHtml('누적 판매액', cpCum !== null ? '₩' + fmt(cpCum) : null) +
+    '</div>' +
+    (cpCum !== null ? '<div class="bar"><i style="width:' + cpPct.toFixed(1) + '%"></i></div><div class="src">최종 승인 기준 ₩150,000까지 ' + cpPct.toFixed(1) + '% · 남은 금액 ₩' + fmt(150000 - Number(cpCum)) + '</div>' : '') +
+    '<div class="src">실적은 자동 수집 금지 규칙에 따라 수동 확인분만 표시합니다 · 확인일 ' + mc(mm, 'coupang', '수익(원)') + ' · 파트너스 ID AF4483016</div></section>' +
+  '<section><h2>네이버 쇼핑커넥트 <span class="badge ok">매일 2편 발행 중</span></h2>' +
+    '<div class="stats">' +
+      statHtml('최근 발행', scRecent !== null ? scRecent + '편' : null, '') +
+      statHtml('건당 수수료 최고', scFee !== null ? '₩' + fmt(scFee) : null) +
+    '</div>' +
+    '<div class="src">건당 수수료는 구매 발생 시 기준 단가입니다 (삼성 비스포크 AI 콤보, ' + mc(mm, 'shopping_connect', '건당 수수료 최고(원)') + '). 발생 실적은 정산 확인 전이라 표시하지 않습니다. 최근 발행: 드리미 X60 (건당 ₩79,500) · 경동나비엔 온수매트 (건당 ₩24,500), 2026-11-13.</div></section>';
+
+  // 초대코드
+  const ivF = mv(mm, 'invite_arkhzz', '가입 친구(명)'), ivR = mv(mm, 'invite_arkhzz', '잔여 한도(회)'), ivB = mv(mm, 'invite_arkhzz', '추가 토큰 잔액');
+  h += '<div class="group">초대코드</div><section><h2>Muse 초대코드</h2>' +
+    '<div style="margin:6px 0 2px"><span class="bigcode">ARKHZZ</span></div>' +
+    '<div class="stats">' +
+      statHtml('가입 친구', ivF !== null ? ivF + '명' : null) +
+      statHtml('잔여 한도', ivR !== null ? ivR + '회' : null) +
+      statHtml('추가 토큰 잔액', ivB !== null ? String(ivB) : null) +
+    '</div>' +
+    '<div class="src">기준일 ' + mc(mm, 'invite_arkhzz', '가입 친구(명)') + ' · 초대코드 찾기방 기록 기준. 가입하면 양쪽 10억 토큰.</div></section>';
 
   // 프로젝트 상태
-  h += '<section><h2>프로젝트 상태</h2>' + d.project_status.map(p =>
-    '<div class="prow"><div class="dot' + (p.project_id === 'adsense' ? ' warn' : '') + '"></div><div><div class="pn">' + esc(p.name) + '</div><div class="ps">' + esc(p.status_text) + (p.milestone ? ' · ' + esc(p.milestone) : '') + '</div></div></div>').join('') +
-    '<div class="src">상태 기준일: 각 항목 ' + 'updated_at' + ' 참조 · 수집 시각 매일 21:30</div></section>';
+  h += '<div class="group">프로젝트 상태</div><section><h2>진행 중</h2>' + d.project_status.filter(p => p.project_id).map(p =>
+    '<div class="prow"><div class="dot' + (p.project_id === 'adsense' || p.project_id === 'coupang' ? ' warn' : '') + '"></div><div><div class="pn">' + esc(p.name) + '</div><div class="ps">' + esc(p.status_text) + (p.milestone ? ' · ' + esc(p.milestone) : '') + '</div></div><div class="pd">' + esc(p.updated_at) + '</div></div>').join('') +
+    '</section>';
+
+  h += '<div class="foot">수집: 매일 21:30 자동 (지잡대 Studio 분석 로그 · 스토리스피커 상태 파일 · 티스토리 공개 페이지). 인스타그램·Threads는 커넥터 조회값, 쿠팡·초대코드는 수동 확인분만 날짜와 함께 표시합니다. 수집이 빈 지표는 0이 아니라 미수집으로 표시합니다. 새벽바다·Music Atlas·대광의 구독자는 YouTube Data API 키가 있으면 매일 자동 수집됩니다.</div>';
 
   document.getElementById('app').innerHTML = h;
 }
 
 (async () => {
-  let d = null, gasErr = null;
-  try { d = await loadFromGas(); } catch (e) { gasErr = e; }
+  let d = null;
+  try { d = await loadFromGas(); } catch (e) { /* fall through */ }
   if (!d) {
     try { d = await loadFromSheet(); }
     catch (e) {

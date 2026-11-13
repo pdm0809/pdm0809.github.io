@@ -306,7 +306,7 @@ function render(d){
     '<div class="stats">' +
       statHtml('가입 친구', ivF !== null ? ivF + '명' : null) +
       statHtml('잔여 한도', ivR !== null ? ivR + '회' : null) +
-      statHtml('추가 토큰 잔액', ivB !== null ? String(ivB) : null) +
+      statHtml('추가 토큰 잔액', ivB !== null ? (Number(ivB) >= 100000000 ? fmt(Number(ivB) / 100000000) + '억' : String(ivB)) : null) +
     '</div>' +
     '<div class="src">기준일 ' + mc(mm, 'invite_arkhzz', '가입 친구(명)') + ' · 초대코드 찾기방 기록 기준. 가입하면 양쪽 10억 토큰.</div></section>';
 

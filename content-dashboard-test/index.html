@@ -6,152 +6,159 @@
 <title>콘텐츠 현황판</title>
 <meta name="theme-color" content="#0b0e14">
 <style>
-  :root{
-    --bg:#0b0e14; --card:#141922; --card2:#1a202b; --well:#10141c; --line:#232a37; --line2:#2d3545;
-    --text:#edf1f7; --sub:#a3aec2; --dim:#677389; --mute:#4a5468;
-    --up:#ff6b6b; --down:#5b8cff; --flat:#8b97ab;
-    --accent:#ffd84a; --green:#3fdc8a; --pink:#ff7eb9; --cyan:#4fd6ff; --yt:#ff6464; --violet:#a98bff;
-    --r:16px;
-  }
-  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-  html{scroll-behavior:smooth;scroll-padding-top:56px}
-  body{background:var(--bg);color:var(--text);font-family:Pretendard,-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR","Segoe UI",sans-serif;
-       font-size:14px;line-height:1.45;padding:0 0 48px;-webkit-font-smoothing:antialiased;word-break:keep-all}
-  .wrap{max-width:720px;margin:0 auto;padding:0 14px}
-  .num,.tab{font-variant-numeric:tabular-nums}
+:root{color-scheme:dark;--bg:#0c1015;--card:#151c24;--well:#10161d;--line:#303d4c;--text:#f3f6fa;--sub:#bdc8d6;--accent:#c4ed91;--up:#c4ed91;--down:#ffaba5;--r:20px}
 
-  /* 머리글 */
-  header{padding:20px 2px 14px;display:flex;justify-content:space-between;align-items:flex-end;gap:12px}
-  header h1{font-size:23px;font-weight:800;letter-spacing:-.6px;line-height:1.15}
-  header .scope{font-size:11.5px;color:var(--dim);margin-top:4px}
-  header .upd{text-align:right;flex:none}
-  header .upd .k{font-size:10.5px;color:var(--dim);letter-spacing:.3px}
-  header .upd .v{font-size:13px;font-weight:700;color:var(--sub);margin-top:2px}
-  nav{position:sticky;top:0;z-index:5;background:rgba(11,14,20,.92);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
-  nav .wrap{display:flex;gap:6px;overflow-x:auto;padding-top:8px;padding-bottom:8px;scrollbar-width:none}
-  nav .wrap::-webkit-scrollbar{display:none}
-  nav a{flex:none;font-size:12px;font-weight:700;color:var(--sub);text-decoration:none;padding:6px 11px;border-radius:999px;background:var(--card);border:1px solid var(--line)}
+*{box-sizing:border-box;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}
 
-  #err{display:none;border-radius:12px;padding:11px 13px;font-size:12.5px;margin:12px 0 0;line-height:1.55}
-  #err.fallback{display:block;background:#2a2310;border:1px solid #574616;color:#ffe08a}
-  #err.fail{display:block;background:#33141c;border:1px solid #66222f;color:#ffb9c2}
-  .loading{color:var(--dim);font-size:13px;padding:40px 0;text-align:center}
+html{scroll-behavior:smooth;scroll-padding-top:90px}
 
-  /* 구역 */
-  .group{margin:28px 2px 10px;display:flex;align-items:baseline;gap:8px}
-  .group h2{font-size:16.5px;font-weight:800;letter-spacing:-.3px}
-  .group .gsub{font-size:11.5px;color:var(--dim)}
-  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:15px 14px;margin-bottom:10px}
-  .card-h{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-  .card-h h3{font-size:15.5px;font-weight:800;letter-spacing:-.3px}
-  .handle{font-size:11.5px;color:var(--dim)}
-  .chip{font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:999px;background:var(--card2);border:1px solid var(--line2);color:var(--sub);white-space:nowrap}
-  .chip.yt{color:var(--yt)} .chip.ig{color:var(--pink)} .chip.tt{color:var(--cyan)} .chip.th{color:var(--violet)}
-  .chip.ok{background:#11301f;border-color:#1d4d33;color:var(--green)}
-  .chip.warn{background:#30270f;border-color:#55451a;color:var(--accent)}
-  .chip.none{background:#2a1a1f;border-color:#4a2a33;color:#ff9fae}
-  .ml{margin-left:auto}
-  .src{font-size:10.5px;color:var(--dim);line-height:1.6;margin-top:11px}
-  .na{color:var(--mute);font-weight:700}
-  .delta{font-size:11.5px;font-weight:800;margin-left:5px}
-  .delta.up{color:var(--up)} .delta.down{color:var(--down)} .delta.flat{color:var(--flat)}
+body{margin:0;background:var(--bg);color:var(--text);font-size:16px;line-height:1.65;font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;word-break:keep-all;-webkit-font-smoothing:antialiased}
 
-  /* 핵심 요약 */
-  .sumtbl{width:100%;border-collapse:collapse}
-  .sumtbl th{font-size:10.5px;color:var(--dim);font-weight:700;text-align:right;padding:0 0 8px;white-space:nowrap}
-  .sumtbl th:first-child{text-align:left}
-  .sumtbl td{padding:9px 0;border-top:1px solid var(--line);text-align:right;font-size:14px;font-weight:800;white-space:nowrap}
-  .sumtbl td:first-child{text-align:left;font-weight:700;font-size:13px;white-space:normal}
-  .sumtbl td .d{display:block;font-size:10px;color:var(--dim);font-weight:500;margin-top:1px}
-  .sumtbl td .na{font-size:12px}
-  .kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-  .kpi{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 11px}
-  .kpi .k{font-size:11px;color:var(--sub);font-weight:600}
-  .kpi .v{font-size:21px;font-weight:800;letter-spacing:-.6px;margin-top:5px;line-height:1.1}
-  .kpi .v small{font-size:12px;color:var(--sub);font-weight:700;margin-left:1px}
-  .kpi .d{font-size:10px;color:var(--dim);margin-top:5px;line-height:1.45}
+a{color:inherit;text-underline-offset:5px;text-decoration-color:#839b70}
+a[target]::after{content:" ↗";color:var(--accent);font-size:.75em;white-space:nowrap}
+a:hover{color:var(--accent)}
+a:focus-visible{outline:2px solid var(--accent);outline-offset:5px}
 
-  /* 유튜브 채널 카드 — 전 채널 동일 양식 */
-  .yt-card{padding:16px 15px 14px;margin-bottom:12px}
-  .yt-card .card-h{gap:6px 8px}
-  .yt-card .card-h h3{font-size:16px}
-  .yt-card .handle{align-self:baseline}
-  .gnote{margin:-4px 2px 12px;font-size:11px;color:var(--dim);line-height:1.55;padding:7px 10px;border-left:2px solid var(--line2);background:var(--well);border-radius:0 8px 8px 0}
-  /* 지표 7종: 모바일 2열(마지막 1개 전폭) → 560px↑ 12분할(윗줄 4개·아랫줄 3개 균형) */
-  .yt-card .metrics{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:13px}
-  @media(max-width:559px){.yt-card .metrics .m:last-child:nth-child(odd){grid-column:1 / -1}}
-  @media(min-width:560px){
-    .yt-card .metrics{grid-template-columns:repeat(12,1fr)}
-    .yt-card .metrics .m{grid-column:span 3}
-    .yt-card .metrics .m:nth-child(n+5){grid-column:span 4}
-  }
-  .m{background:var(--well);border:1px solid var(--line);border-radius:12px;padding:10px 11px 9px;min-height:78px;display:flex;flex-direction:column}
-  .fl{font-size:11px;color:var(--sub);font-weight:600;letter-spacing:-.1px}
-  .m .fl{font-size:10.5px;color:var(--dim);font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .m .fv{font-size:19px;font-weight:800;letter-spacing:-.5px;margin-top:5px;line-height:1.15;color:var(--text);white-space:nowrap}
-  .m .fv small{font-size:11px;color:var(--sub);font-weight:700;margin-left:2px}
-  .m .fv.na{font-size:14px;color:var(--mute)}
-  .m .fd{font-size:10px;color:var(--dim);margin-top:auto;padding-top:4px}
-  .blk{margin-top:10px;background:var(--well);border:1px solid var(--line);border-radius:12px;padding:10px 11px 6px}
-  .blk-h{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:6px}
-  .blk-h .fl{font-size:10.5px;color:var(--dim);font-weight:700}
-  .blk-h .fd{font-size:10px;color:var(--dim)}
-  .vt{width:100%;border-collapse:collapse;table-layout:fixed}
-  .vt th{font-size:10px;color:var(--dim);font-weight:600;text-align:right;padding:2px 0 6px}
-  .vt th:first-child{text-align:left}
-  .vt td{font-size:12.5px;line-height:1.35;padding:7px 0;border-top:1px solid var(--line);text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-variant-numeric:tabular-nums}
-  .vt td:first-child{text-align:left;padding-right:10px}
-  .vt td.num{font-weight:700}
-  .vt td.na{font-size:11px}
-  .vt .rk{display:inline-block;width:17px;color:var(--accent);font-weight:800}
-  .vt col.c-t{width:auto} .vt col.c-v{width:62px} .vt col.c-l{width:50px} .vt col.c-c{width:42px}
-  .vt.full tbody tr:nth-child(even) td{background:rgba(255,255,255,.015)}
-  .spark-box{height:46px;display:flex;align-items:center;justify-content:center;border-radius:8px}
-  .spark-box.empty{border:1px dashed var(--line2);font-size:11px;color:var(--mute);font-weight:700}
-  svg.sparkline{width:100%;height:46px;display:block}
-  .yt-src{font-size:10.5px;color:var(--dim);line-height:1.6;margin-top:11px;padding-top:9px;border-top:1px solid var(--line)}
-  .yt-src .fl{font-size:10.5px;color:var(--sub);margin-right:4px}
+h1,h2,h3,p{margin:0}
+ .wrap{max-width:1240px;margin:auto;padding:0 32px}
+header{padding:44px 0 30px;display:flex;justify-content:space-between;gap:24px;align-items:end}
+h1{font-size:34px;line-height:1.25;letter-spacing:-1.2px}
+.scope{color:var(--sub);margin-top:10px}
+.upd{max-width:320px;text-align:right}
+.upd .k{color:var(--accent);font-size:13px}
+.upd .v{margin-top:5px;font-size:15px;overflow-wrap:anywhere}
 
-  /* 행 목록 (SNS·블로그·프로젝트) */
-  .row{display:flex;align-items:center;gap:10px;padding:11px 0;border-top:1px solid var(--line)}
-  .row:first-of-type{border-top:none}
-  .row .l{flex:1;min-width:0}
-  .row .t{font-size:13.5px;font-weight:700;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
-  .row .s{font-size:11px;color:var(--dim);margin-top:2px;line-height:1.5}
-  .row .r{text-align:right;flex:none}
-  .pair{display:flex;gap:14px;justify-content:flex-end}
-  .pair div{text-align:right}
-  .pair .k{font-size:10px;color:var(--dim)}
-  .pair .v{font-size:15px;font-weight:800;margin-top:1px}
-  .pair .v.na{font-size:12px}
-  .row .d{font-size:10px;color:var(--dim);margin-top:3px}
+nav{position:sticky;top:0;z-index:5;background:#0c1015;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;gap:8px;overflow-x:auto;padding-top:12px;padding-bottom:12px}
+nav a{flex:none;padding:7px 13px;text-decoration:none;font-size:14px;color:var(--sub);border-radius:8px}
+nav a:hover{background:var(--card)}
 
-  /* 수익 */
-  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
-  .stat{background:var(--well);border:1px solid var(--line);border-radius:12px;padding:10px 11px}
-  .stat .k{font-size:11px;color:var(--sub);font-weight:600}
-  .stat .v{font-size:19px;font-weight:800;margin-top:4px;letter-spacing:-.4px}
-  .line-item{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:8px;background:var(--well);border:1px solid var(--line);border-radius:12px;padding:10px 11px}
-  .line-item .k{font-size:12px;color:var(--sub);font-weight:600}
-  .line-item .k small{display:block;font-size:10px;color:var(--dim);font-weight:500;margin-top:1px}
-  .line-item .v{font-size:15px;font-weight:800;text-align:right}
-  .nores{margin-top:12px;border-radius:12px;padding:12px;background:#21151a;border:1px solid #47272f}
-  .nores .k{font-size:11px;color:#ff9fae;font-weight:700}
-  .nores .v{font-size:15px;font-weight:800;margin-top:3px}
-  .ops{margin-top:10px}
-  .ops .cap{font-size:11px;color:var(--sub);font-weight:700;margin-bottom:4px}
-  .ops ul{list-style:none}
-  .ops li{font-size:12.5px;padding:5px 0;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:10px}
-  .ops li:first-child{border-top:none}
-  .ops li span:last-child{color:var(--dim);font-size:11px;flex:none}
+.group{display:flex;align-items:baseline;gap:16px;margin:48px 0 18px}
+.group h2{font-size:24px;letter-spacing:-.6px}
+.gsub{font-size:14px;color:var(--sub)}
+.card{padding:24px;background:var(--card);border:1px solid var(--line);border-radius:var(--r);margin-bottom:18px;min-width:0}
+.channel-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+.channel-grid>.card{margin:0}
+.card-h{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.card-h h3{font-size:23px;letter-spacing:-.5px}
+.handle{font-size:13px;color:var(--sub)}
+.chip{font-size:12px;padding:3px 9px;border:1px solid var(--line);border-radius:6px;color:var(--sub)}
+.ml{margin-left:auto}
+.src,.yt-src,.fd,.d{font-size:12px;color:var(--sub);line-height:1.65;overflow-wrap:anywhere}
+.src,.yt-src{margin-top:18px}
+.yt-src{padding-top:15px;border-top:1px solid var(--line)}
+.na{color:var(--sub);font-size:16px;font-weight:500}
+.num,.v,.fv{font-variant-numeric:tabular-nums}
+.gnote{color:var(--sub);border-left:3px solid var(--accent);padding:10px 16px;margin-bottom:20px;background:var(--well);font-size:14px}
+.metrics{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:24px}
+.m{padding:15px;background:var(--well);border:1px solid var(--line);border-radius:12px;min-width:0}
+.m:first-child{grid-column:1/-1;border-color:#6b8656;padding:20px}
+.fl,.k{font-size:14px;color:var(--sub)}
+.fv{font-size:26px;font-weight:750;line-height:1.4;margin:7px 0;overflow-wrap:anywhere}
+.m:first-child .fv{font-size:44px;color:var(--accent);letter-spacing:-1.2px}
+small{font-size:14px;font-weight:500;margin-left:4px;color:var(--sub)}
+.delta{font-size:14px;margin-left:10px;letter-spacing:0}
+.up{color:var(--up)}
+.down{color:var(--down)}
+.flat{color:var(--sub)}
+.blk{margin-top:22px;padding-top:18px;border-top:1px solid var(--line)}
+.blk-h{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.blk-h .fl{color:var(--text);font-weight:650}
 
-  /* 초대코드 */
-  .code{font-size:26px;font-weight:800;letter-spacing:3px;color:var(--accent);margin-top:8px}
+table{width:100%;border-collapse:collapse;table-layout:fixed}
+th{font-size:12px;color:var(--sub);font-weight:500}
+td,th{text-align:right;padding:12px 4px;border-bottom:1px solid var(--line);overflow-wrap:anywhere}
+td:first-child,th:first-child{text-align:left}
+td{font-size:15px}
+.sumtbl th:first-child{width:28%}
+.sumtbl td{font-size:20px;font-weight:650}
+.sumtbl td:first-child{font-size:17px}
+.sumtbl td .d{display:block;font-weight:400;margin-top:5px}
+.c-t{width:46%}
+.c-v,.c-l,.c-c{width:18%}
+.vt td:first-child{font-size:14px;word-break:break-word;padding-right:10px}
+.vt .na{font-size:13px}
+.rk{color:var(--accent);margin-right:7px}
+.spark-box{padding:15px;border:1px dashed var(--line);border-radius:10px;color:var(--sub);font-size:13px}
+.sparkline{width:100%;height:62px;display:block}
+.kpis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:16px}
+.kpi{padding:20px;background:var(--card);border:1px solid var(--line);border-radius:16px;min-width:0}
+.kpi .v{font-size:30px;font-weight:750;margin:10px 0}
+.row{display:flex;align-items:center;gap:20px;padding:22px 0;border-bottom:1px solid var(--line)}
+.row:first-child{padding-top:0}
+.row:last-child{padding-bottom:0;border-bottom:0}
+.l{flex:1;min-width:0}
+.t{font-size:18px;font-weight:650}
+.s{font-size:14px;color:var(--sub);margin-top:6px;overflow-wrap:anywhere}
+.r{text-align:right;min-width:0}
+.pair{display:flex;justify-content:flex-end;gap:26px}
+.pair .v{font-size:24px;font-weight:700}
+.pair .v.na{font-size:16px}
+.r .d{margin-top:8px}
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:22px}
+.stat{padding:16px;background:var(--well);border:1px solid var(--line);border-radius:12px;min-width:0}
+.stat .v{font-size:28px;font-weight:750;margin-top:8px;overflow-wrap:anywhere}
+.line-item{display:flex;justify-content:space-between;gap:20px;align-items:center;padding:18px;margin-top:14px;border:1px solid var(--line);border-radius:12px}
+.line-item small{display:block;margin:5px 0 0}
+.line-item .v{font-size:26px;font-weight:700;overflow-wrap:anywhere}
+.nores{padding:20px;margin-top:22px;border:1px solid var(--line);border-radius:12px}
+.nores .v{margin-top:8px;font-size:19px}
+.ops{margin-top:24px}
+.cap{color:var(--sub);font-size:14px}
+.ops ul{list-style:none;padding:0;margin:8px 0 0}
+.ops li{display:flex;justify-content:space-between;gap:20px;padding:12px 0;border-top:1px solid var(--line);font-size:14px}
+.ops li span:last-child{color:var(--sub);overflow-wrap:anywhere}
+.code{font-size:38px;letter-spacing:5px;color:var(--accent);font-weight:750;margin-top:18px}
+.dot{width:8px;height:8px;background:var(--accent);border-radius:50%;flex:none}
+.dot.warn{background:#ffd18a}
+.foot{font-size:13px;color:var(--sub);padding:32px 0 48px;margin-top:24px;border-top:1px solid var(--line)}
+#err{display:none}
+#err.fallback,#err.fail{display:block;padding:18px;border:1px solid #987c4f;background:#282219;color:#ffe2ad;border-radius:12px;margin-top:24px}
+.loading{padding:64px 0;color:var(--sub)}
 
-  /* 프로젝트 */
-  .dot{width:8px;height:8px;border-radius:50%;background:var(--green);flex:none;align-self:flex-start;margin-top:6px}
-  .dot.warn{background:var(--accent)}
-  .foot{font-size:10.5px;color:var(--dim);line-height:1.75;margin-top:22px;padding:0 2px}
+@media(max-width:760px){.wrap{padding:0 18px}
+header{padding:28px 0 22px;display:block}
+h1{font-size:29px}
+.scope{font-size:14px}
+.upd{text-align:left;margin-top:20px;max-width:none}
+.upd .k,.upd .v{display:inline;margin-right:8px;font-size:12px}
+.group{margin-top:36px;gap:12px;flex-wrap:wrap}
+.group h2{font-size:22px}
+.gsub{font-size:13px}
+.channel-grid{grid-template-columns:minmax(0,1fr);gap:18px}
+.card{padding:20px}
+.card-h h3{font-size:22px}
+.handle{order:3;width:100%}
+.metrics{gap:10px}
+.m{padding:12px}
+.fv{font-size:25px}
+.fd{font-size:12px}
+.sumtbl td{font-size:16px;padding:14px 2px}
+.sumtbl td:first-child{font-size:14px}
+.sumtbl .d{font-size:11px}
+.sumtbl th{font-size:11px}
+.sumtbl th:first-child{width:27%}
+.kpis{grid-template-columns:1fr;gap:10px}
+.kpi{display:grid;grid-template-columns:1fr auto;align-items:center;gap:6px 12px;padding:16px}
+.kpi .v{margin:0;font-size:26px}
+.kpi .d{grid-column:1/-1}
+.row{align-items:stretch;flex-direction:column;gap:14px}
+.r{text-align:left}
+.pair{justify-content:flex-start;gap:36px}
+.stats{grid-template-columns:1fr}
+.stat{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:8px 12px}
+.stat>.d{grid-column:1/-1}
+.stat .v{margin:0;font-size:26px}
+.line-item{align-items:flex-start;flex-direction:column;gap:12px}
+.ops li{flex-direction:column;gap:6px}
+.vt td{font-size:13px}
+.vt td:first-child{font-size:14px}
+.vt th{font-size:11px}
+}
+
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}
+}
+
 </style>
 </head>
 <body>
@@ -165,11 +172,11 @@
   </header>
 </div>
 <nav><div class="wrap">
-  <a href="#s-sum">요약</a><a href="#s-yt">유튜브</a><a href="#s-sns">SNS</a><a href="#s-blog">블로그</a><a href="#s-rev">수익</a><a href="#s-inv">초대코드</a><a href="#s-proj">프로젝트</a>
+  <a href="#s-sum">요약</a><a href="#s-yt">유튜브</a><a href="#s-ytvid">영상별 실측</a><a href="#s-sns">SNS</a><a href="#s-blog">블로그</a><a href="#s-rev">수익</a><a href="#s-inv">초대코드</a><a href="#s-proj">프로젝트</a>
 </div></nav>
 <div class="wrap">
-  <div id="err"></div>
-  <div id="app"><div class="loading">지표를 불러오고 있습니다…</div></div>
+  <div id="err" role="status" aria-live="polite"></div>
+  <main id="app"><div class="loading">지표를 불러오고 있습니다…</div></main>
 </div>
 
 <script>
@@ -184,21 +191,23 @@ const YT = [
   { id: 'UCrIurwPHzIsbq3I2ymFa46w', name: '새벽바다',     handle: '@PearlineMae',       mm: 'saebyeokbada' },
   { id: 'UC3eTpLaL2U0cQeu1BVmDwwg', name: 'Music Atlas',  handle: '@MusicAtlasOfficial', mm: 'music_atlas' }
 ];
+const link = (name, url) => '<a href="' + esc(url) + '" target="_blank" rel="noopener">' + esc(name) + '</a>';
+const ytLink = ch => link(ch.name, 'https://www.youtube.com/channel/' + ch.id);
 const NA = '미수집';
 const M28_VIEWS = '최근 28일 조회수', M28_HOURS = '최근 28일 시청 시간(시간)';
 const M_MONTHLY = '월간 시청자(명)', M_KR = '시청자 지역 대한민국(%)', M_48H = '실시간 48시간 조회수';
 
-const isNum = v => v !== '' && v !== null && v !== undefined && !isNaN(Number(v));
+const isNum = v => v !== '' && v !== null && v !== undefined && typeof v !== 'boolean' && String(v).trim() !== '' && Number.isFinite(Number(v));
 const fmt = n => isNum(n) ? Number(n).toLocaleString('ko-KR') : null;
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const provenance = (r, source) => esc(source) + ' · ' + (r ? esc(r.checked_at || r.date || r.updated_at || NA) + ' 기준' : '실측 기록 없음');
 const naHtml = () => '<span class="na">' + NA + '</span>';
-const md = s => { const m = String(s || '').match(/^\d{4}-(\d{2})-(\d{2})/); return m ? m[1] + '.' + m[2] : ''; };
 
 // ---------- 데이터 통로: GAS 우선 → 실패 시 시트 gviz 폴백 ----------
 async function loadFromGas(){
-  const r = await fetch(GAS_URL, { redirect:'follow' });
+  const r = await fetch(GAS_URL, { redirect:'follow', signal:AbortSignal.timeout(15000) });
   const d = JSON.parse(await r.text());
-  if (!d || !Array.isArray(d.channel_daily)) throw new Error('gas shape');
+  if (!r.ok || !d || !TABS.every(tab => Array.isArray(d[tab]))) throw new Error('gas shape');
   return d;
 }
 function parseGviz(text){
@@ -224,7 +233,8 @@ function parseGviz(text){
 async function loadFromSheet(){
   const out = { generated_at: '' };
   for (const tab of TABS) {
-    const r = await fetch('https://docs.google.com/spreadsheets/d/' + SHEET_ID + '/gviz/tq?tqx=out:json&sheet=' + tab);
+    const r = await fetch('https://docs.google.com/spreadsheets/d/' + SHEET_ID + '/gviz/tq?tqx=out:json&sheet=' + tab, {signal:AbortSignal.timeout(15000)});
+    if (!r.ok) throw new Error('sheet response');
     out[tab] = parseGviz(await r.text());
   }
   return out;
@@ -247,7 +257,6 @@ function manualMap(rows){
   return map;
 }
 const mrow = (mm, proj, metric) => (mm[proj] && mm[proj][metric]) || null;
-const mval = (mm, proj, metric) => { const r = mrow(mm, proj, metric); return r && r.value !== '' ? r.value : null; };
 const mdate = (mm, proj, metric) => { const r = mrow(mm, proj, metric); return r ? String(r.checked_at || r.date || '') : ''; };
 // Studio가 '9.2만'처럼 만 단위로 보여 준 값은 그 정밀도 그대로 표기한다
 function mHtml(r, unit){
@@ -278,8 +287,8 @@ function sparkHtml(series){
   const pts = xy.map(p => p[0].toFixed(1) + ',' + p[1].toFixed(1)).join(' ');
   const last = xy[xy.length - 1];
   return '<svg class="sparkline" viewBox="0 0 ' + W + ' ' + H + '" preserveAspectRatio="none">' +
-    '<polyline points="' + pts + '" fill="none" stroke="#ffd84a" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke"/>' +
-    '<circle cx="' + last[0].toFixed(1) + '" cy="' + last[1].toFixed(1) + '" r="3" fill="#ffd84a"/></svg>';
+    '<polyline points="' + pts + '" fill="none" stroke="#c4ed91" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke"/>' +
+    '<circle cx="' + last[0].toFixed(1) + '" cy="' + last[1].toFixed(1) + '" r="3" fill="#c4ed91"/></svg>';
 }
 // 최신 스냅샷 기준: 조회수 실측 영상은 조회수 순, 조회수 없는 영상은 최근 게시순, 빈 자리는 미수집 슬롯
 function top3Rows(videos, chId){
@@ -297,9 +306,9 @@ function top3Rows(videos, chId){
 
 // 채널 최신 스냅샷의 조회수 실측 영상 전체 (조회수 내림차순)
 function channelVideos(videos, chId){
-  const t = videos.filter(v => v.channel_id === chId && isNum(v.views));
+  const t = videos.filter(v => v.channel_id === chId);
   const dt = t.map(v => String(v.date)).sort().pop();
-  return t.filter(v => String(v.date) === dt).sort((a, b) => Number(b.views) - Number(a.views));
+  return t.filter(v => String(v.date) === dt).sort((a,b) => (isNum(b.views) ? Number(b.views) : -1) - (isNum(a.views) ? Number(a.views) : -1));
 }
 const VT_HEAD = '<colgroup><col class="c-t"><col class="c-v"><col class="c-l"><col class="c-c"></colgroup><thead><tr><th>제목</th><th>조회수</th><th>좋아요</th><th>댓글</th></tr></thead>';
 const vtCell = x => isNum(x) ? '<td class="num">' + fmt(x) + '</td>' : '<td class="na">' + NA + '</td>';
@@ -308,10 +317,10 @@ const vtCell = x => isNum(x) ? '<td class="num">' + fmt(x) + '</td>' : '<td clas
 // 공통 필드셋: 순서·라벨·레이아웃 고정. 값이 없으면 필드를 빼지 않고 '미수집'으로 채운다.
 const YT_FIELDS = ['구독자', '영상 수', '최근 28일 조회수', '28일 시청 시간', '월간 시청자', '시청자 한국 비중', '최근 48시간 조회수', '최근 영상 TOP3', '구독자 추이', '출처·기준일'];
 
-function metricBox(label, valueHtml, dateText){
+function metricBox(label, valueHtml, dateText, source){
   return '<div class="m" data-field="' + esc(label) + '"><div class="fl">' + esc(label) + '</div>' +
     '<div class="fv num' + (valueHtml === null ? ' na' : '') + '">' + (valueHtml === null ? NA : valueHtml) + '</div>' +
-    '<div class="fd">' + (valueHtml === null ? '실측 기록 없음' : esc(dateText) + ' 기준') + '</div></div>';
+    '<div class="fd">' + (valueHtml === null ? '실측 기록 없음' : esc(dateText) + ' 기준 · ' + esc(source || 'manual_metrics')) + '</div></div>';
 }
 function ytCard(d, ch, mm){
   const latest = latestBy(d.channel_daily, 'channel_id')[ch.id] || null;
@@ -324,10 +333,10 @@ function ytCard(d, ch, mm){
   const top = top3Rows(d.video_daily, ch.id);
 
   let h = '<article class="card yt-card" data-ch="' + esc(ch.id) + '">' +
-    '<div class="card-h"><h3>' + esc(ch.name) + '</h3><span class="handle">' + esc(ch.handle) + '</span><span class="chip yt ml">YouTube</span></div>' +
+    '<div class="card-h"><h3>' + ytLink(ch) + '</h3><span class="handle">' + esc(ch.handle) + '</span><span class="chip yt ml">YouTube</span></div>' +
     '<div class="metrics">' +
-      metricBox(YT_FIELDS[0], subsRow ? fmt(subsRow.subscribers) + '<small>명</small>' + deltaHtml(series) : null, subsRow && subsRow.date) +
-      metricBox(YT_FIELDS[1], vcRow ? fmt(vcRow.video_count) + '<small>편</small>' : null, vcRow && vcRow.date) +
+      metricBox(YT_FIELDS[0], subsRow ? fmt(subsRow.subscribers) + '<small>명</small>' + deltaHtml(series) : null, subsRow && subsRow.date, subsRow && (subsRow.source || 'channel_daily')) +
+      metricBox(YT_FIELDS[1], vcRow ? fmt(vcRow.video_count) + '<small>편</small>' : null, vcRow && vcRow.date, vcRow && (vcRow.source || 'channel_daily')) +
       metricBox(YT_FIELDS[2], mHtml(v28, '회'), mdate(mm, ch.mm, M28_VIEWS)) +
       metricBox(YT_FIELDS[3], mHtml(h28, '시간'), mdate(mm, ch.mm, M28_HOURS)) +
       metricBox(YT_FIELDS[4], mHtml(mon, '명'), mdate(mm, ch.mm, M_MONTHLY)) +
@@ -336,7 +345,7 @@ function ytCard(d, ch, mm){
     '</div>';
 
   h += '<div class="blk" data-field="' + YT_FIELDS[7] + '"><div class="blk-h"><span class="fl">' + YT_FIELDS[7] + '</span>' +
-       '<span class="fd">' + (top.date ? esc(top.date) + ' 스냅샷 · 조회수 순' : '실측 기록 없음') + '</span></div>' +
+       '<span class="fd">' + (top.date ? esc(top.date) + ' · video_daily · 조회수 순' : '실측 기록 없음') + '</span></div>' +
        '<table class="vt">' + VT_HEAD + '<tbody>' +
        top.rows.map((v, i) => {
          if (!v) return '<tr><td><span class="rk">' + (i+1) + '</span><span class="na">' + NA + '</span></td><td class="na">' + NA + '</td><td class="na">' + NA + '</td><td class="na">' + NA + '</td></tr>';
@@ -344,7 +353,7 @@ function ytCard(d, ch, mm){
        }).join('') + '</tbody></table></div>';
 
   h += '<div class="blk" data-field="' + YT_FIELDS[8] + '"><div class="blk-h"><span class="fl">' + YT_FIELDS[8] + '</span>' +
-       '<span class="fd">' + (series.length >= 2 ? '최근 ' + Math.min(series.length, 30) + '회 실측' : '') + '</span></div>' + sparkHtml(series) + '</div>';
+       '<span class="fd">' + (series.length >= 2 ? '최근 ' + Math.min(series.length, 30) + '회 · channel_daily · ' + esc(series[0].date) + ' ~ ' + esc(series[series.length-1].date) : '') + '</span></div>' + sparkHtml(series) + '</div>';
 
   h += '<div class="yt-src" data-field="' + YT_FIELDS[9] + '"><span class="fl">' + YT_FIELDS[9] + '</span>' +
        (latest ? esc(latest.source || NA) + ' · 기준일 ' + esc(latest.date) : NA) +
@@ -353,17 +362,22 @@ function ytCard(d, ch, mm){
 }
 
 // ---------- 렌더 ----------
+function projectName(p){
+ const ch = YT.find(c => p.project_id === c.mm || p.name === c.name);
+ if(ch) return ytLink(ch);
+ const known = {insta_leo:['지잡대TV','https://www.instagram.com/leo_parkkkkk'],insta_story:['스토리스피커','https://www.instagram.com/storyspeaker_kr'],insta_daegwang:['대광 추천템','https://www.instagram.com/daegwang.shop'],threads_leo:['AI 부업 실험실','https://www.threads.com/@leo_parkkkkk'],tiktok:['스토리스피커','https://www.tiktok.com/@storyspeaker_kr'],tistory:['티스토리 · AI 부업 실험실','https://editor41386.tistory.com'],naver:['네이버 · 잡다한 실험실','https://blog.naver.com/pdm0809']};
+ const k=known[p.project_id]; return k ? link(p.name,k[1]) : esc(p.name);
+}
 function render(d){
   const mm = manualMap(d.manual_metrics);
-  const chMap = latestBy(d.channel_daily, 'channel_id');
   const blogs = latestBy(d.blog_daily, 'blog_id');
   const tis = blogs['tistory_editor41386'], naver = blogs['naver_pdm0809'];
   const ps = {}; d.project_status.forEach(p => { if (p.project_id) ps[p.project_id] = p; });
 
   const stamps = [].concat(
-    d.channel_daily.map(r => r.collected_at || r.date), d.blog_daily.map(r => r.date),
+    d.channel_daily.map(r => r.collected_at || r.date), d.blog_daily.map(r => r.date), d.video_daily.map(r => r.date),
     d.manual_metrics.map(r => r.checked_at || r.date)).map(String).filter(s => /^\d{4}-/.test(s)).sort();
-  document.getElementById('updTime').textContent = stamps.pop() || d.generated_at || '—';
+  document.getElementById('updTime').textContent = stamps.pop() || d.generated_at || '미수집';
 
   let h = '';
 
@@ -375,65 +389,65 @@ function render(d){
       const s = subsSeries(d.channel_daily, ch.id), sr = s.length ? s[s.length - 1] : null;
       const vc = d.channel_daily.filter(r => r.channel_id === ch.id && isNum(r.video_count)).sort((a,b) => String(a.date).localeCompare(String(b.date))).pop();
       const v28 = mrow(mm, ch.mm, M28_VIEWS);
-      const td = (html, date) => '<td class="num">' + (html === null ? naHtml() : html + '<span class="d">' + md(date) + '</span>') + '</td>';
-      return '<tr><td>' + esc(ch.name) + '</td>' +
-        td(sr ? fmt(sr.subscribers) + deltaHtml(s) : null, sr && sr.date) +
-        td(vc ? fmt(vc.video_count) : null, vc && vc.date) +
-        td(mHtml(v28), v28 && (v28.checked_at || v28.date)) + '</tr>';
+      const td = (html, date, source) => '<td class="num">' + (html === null ? naHtml() : html + '<span class="d">' + esc(date || NA) + ' · ' + esc(source) + '</span>') + '</td>';
+      return '<tr><td>' + ytLink(ch) + '</td>' +
+        td(sr ? fmt(sr.subscribers) + deltaHtml(s) : null, sr && sr.date, sr && (sr.source || 'channel_daily')) +
+        td(vc ? fmt(vc.video_count) : null, vc && vc.date, vc && (vc.source || 'channel_daily')) +
+        td(mHtml(v28), v28 && (v28.checked_at || v28.date), 'manual_metrics') + '</tr>';
     }).join('') + '</tbody></table></div>' +
     '<div class="kpis">' +
-      '<div class="kpi"><div class="k">티스토리 글</div><div class="v num">' + (tis && isNum(tis.posts_total) ? fmt(tis.posts_total) + '<small>편</small>' : naHtml()) + '</div><div class="d">' + (tis ? esc(tis.date) + ' 실측' : '') + '</div></div>' +
-      '<div class="kpi"><div class="k">네이버 블로그 글</div><div class="v num">' + (naver && isNum(naver.posts_total) ? fmt(naver.posts_total) + '<small>편</small>' : naHtml()) + '</div><div class="d">' + (naver ? esc(naver.date) + ' 실측' : '') + '</div></div>' +
-      '<div class="kpi"><div class="k">확인된 수익 (쿠팡)</div><div class="v num">' + (cpRev && isNum(cpRev.value) ? '₩' + fmt(cpRev.value) : naHtml()) + '</div><div class="d">' + (cpRev ? esc(cpRev.checked_at || cpRev.date) + ' 수동 확인' : '') + '</div></div>' +
+      '<div class="kpi"><div class="k">' + link('티스토리 · AI 부업 실험실', 'https://editor41386.tistory.com') + ' · 글</div><div class="v num">' + (tis && isNum(tis.posts_total) ? fmt(tis.posts_total) + '<small>편</small>' : naHtml()) + '</div><div class="d">' + (tis ? esc(tis.date) + ' · blog_daily' : '') + '</div></div>' +
+      '<div class="kpi"><div class="k">' + link('네이버 · 잡다한 실험실', 'https://blog.naver.com/pdm0809') + ' · 글</div><div class="v num">' + (naver && isNum(naver.posts_total) ? fmt(naver.posts_total) + '<small>편</small>' : naHtml()) + '</div><div class="d">' + (naver ? esc(naver.date) + ' · blog_daily' : '') + '</div></div>' +
+      '<div class="kpi"><div class="k">확인된 수익 (쿠팡)</div><div class="v num">' + (cpRev && isNum(cpRev.value) ? '₩' + fmt(cpRev.value) : naHtml()) + '</div><div class="d">' + (cpRev ? esc(cpRev.checked_at || cpRev.date) + ' · manual_metrics' : '') + '</div></div>' +
     '</div>';
 
   // 2. 유튜브 4채널 (통일 양식)
   h += '<div class="group" id="s-yt"><h2>유튜브</h2><span class="gsub">' + YT.length + '채널 · 동일 양식</span></div>' +
-    '<div class="gnote">대광은 별도 유튜브 채널이 없습니다 — 구 채널이 새벽바다로 통합됐습니다.</div>';
-  h += YT.map(ch => ytCard(d, ch, mm)).join('');
+    '<div class="gnote">대광은 별도 유튜브 채널이 없습니다 — ' + ytLink(YT.find(ch => ch.mm === 'saebyeokbada')) + '로 통합됐습니다.</div>';
+  h += '<div class="channel-grid">' + YT.map(ch => ytCard(d, ch, mm)).join('') + '</div>';
 
   // 2-1. 영상별 실측 (전 채널 동일 구조)
   h += '<div class="group" id="s-ytvid"><h2>영상별 실측</h2><span class="gsub">' + YT.length + '채널 · 최신 스냅샷 전체</span></div>';
-  h += YT.map(ch => {
+  h += '<div class="channel-grid">' + YT.map(ch => {
     const vids = channelVideos(d.video_daily, ch.id);
-    return '<article class="card yt-card" data-vid="' + esc(ch.id) + '"><div class="card-h"><h3>' + esc(ch.name) + ' 영상별 실측</h3><span class="chip ml">Studio 실측</span></div>' +
-      '<div class="blk"><div class="blk-h"><span class="fl">영상 ' + (vids.length ? vids.length + '편 · 조회수 순' : NA) + '</span><span class="fd">' + (vids.length ? esc(vids[0].date) + ' 스냅샷' : '실측 기록 없음') + '</span></div>' +
+    return '<article class="card yt-card" data-vid="' + esc(ch.id) + '"><div class="card-h"><h3>' + ytLink(ch) + ' 영상별 실측</h3><span class="chip ml">Studio 실측</span></div>' +
+      '<div class="blk"><div class="blk-h"><span class="fl">영상 ' + (vids.length ? vids.length + '편 · 조회수 순' : NA) + '</span><span class="fd">' + (vids.length ? esc(vids[0].date) + ' · video_daily' : '실측 기록 없음') + '</span></div>' +
       '<table class="vt full">' + VT_HEAD + '<tbody>' +
       (vids.length ? vids.map(v => '<tr><td title="' + esc(v.title) + '">' + esc(v.title) + '</td>' + vtCell(v.views) + vtCell(v.likes) + vtCell(v.comments) + '</tr>').join('')
                    : '<tr><td class="na">' + NA + '</td><td class="na">' + NA + '</td><td class="na">' + NA + '</td><td class="na">' + NA + '</td></tr>') +
       '</tbody></table></div></article>';
-  }).join('') +
+  }).join('') + '</div>' +
     '<div class="src" style="margin:-2px 2px 0">출처: YouTube Studio 실측 (매일 21:30 수집). 좋아요·댓글은 최신 스냅샷 기준, 값이 없는 영상은 미수집으로 표시합니다.</div>';
 
   // 3. SNS
   const sns = [
-    ['지잡대TV', '@leo_parkkkkk', 'ig', 'Instagram', 'insta_leo'],
-    ['스토리스피커', '@storyspeaker_kr', 'ig', 'Instagram', 'insta_story'],
-    ['대광 추천템', '@daegwang.shop · 판매릴스 전용', 'ig', 'Instagram', 'insta_daegwang'],
-    ['AI 부업 실험실', '@leo_parkkkkk', 'th', 'Threads', 'threads_leo'],
-    ['스토리스피커', '@storyspeaker_kr · 지잡대 크로스포스팅 병행', 'tt', 'TikTok', 'tiktok']
+    ['지잡대TV', '@leo_parkkkkk', 'ig', 'Instagram', 'insta_leo', 'https://www.instagram.com/leo_parkkkkk'],
+    ['스토리스피커', '@storyspeaker_kr', 'ig', 'Instagram', 'insta_story', 'https://www.instagram.com/storyspeaker_kr'],
+    ['대광 추천템', '@daegwang.shop · 판매릴스 전용', 'ig', 'Instagram', 'insta_daegwang', 'https://www.instagram.com/daegwang.shop'],
+    ['AI 부업 실험실', '@leo_parkkkkk', 'th', 'Threads', 'threads_leo', 'https://www.threads.com/@leo_parkkkkk'],
+    ['스토리스피커', '@storyspeaker_kr · 지잡대 크로스포스팅 병행', 'tt', 'TikTok', 'tiktok', 'https://www.tiktok.com/@storyspeaker_kr']
   ];
   h += '<div class="group" id="s-sns"><h2>SNS</h2><span class="gsub">' + sns.length + '계정</span></div><div class="card">' +
-    sns.map(([name, handle, cls, plat, proj]) => {
+    sns.map(([name, handle, cls, plat, proj, url]) => {
       const f = mrow(mm, proj, '팔로워'), p = mrow(mm, proj, '게시물');
-      const pv = r => r && isNum(r.value) ? '<div class="v num">' + fmt(r.value) + '</div>' : '<div class="v na">' + NA + '</div>';
+      const pv = r => r && isNum(r.value) ? '<div class="v num">' + fmt(r.value) + '</div><div class="d">' + provenance(r, 'manual_metrics') + '</div>' : '<div class="v na">' + NA + '</div>';
       const note = proj === 'tiktok' ? (ps.tiktok ? esc(ps.tiktok.status_text) + ' · 공식 조회 경로 없음' : '공식 조회 경로 없음')
                  : (f ? esc(f.checked_at || f.date) + ' 커넥터 프로필 조회' : '실측 기록 없음');
-      return '<div class="row"><div class="l"><div class="t">' + esc(name) + ' <span class="chip ' + cls + '">' + plat + '</span></div><div class="s">' + esc(handle) + '</div></div>' +
+      return '<div class="row"><div class="l"><div class="t">' + link(name, url) + ' <span class="chip ' + cls + '">' + plat + '</span></div><div class="s">' + esc(handle) + '</div></div>' +
         '<div class="r"><div class="pair"><div><div class="k">팔로워</div>' + pv(f) + '</div><div><div class="k">게시물</div>' + pv(p) + '</div></div><div class="d">' + note + '</div></div></div>';
     }).join('') + '</div>';
 
   // 4. 블로그
   const ads = ps.adsense;
   const blogRow = (title, url, b) =>
-    '<div class="row"><div class="l"><div class="t">' + esc(title) + '</div><div class="s">' + esc(url) + (b && b.notes ? ' · ' + esc(b.notes) : '') + '</div></div>' +
+    '<div class="row"><div class="l"><div class="t">' + link(title, 'https://' + url) + '</div><div class="s">' + esc(url) + (b && b.notes ? ' · ' + esc(b.notes) : '') + '</div></div>' +
     '<div class="r"><div class="pair">' +
       '<div><div class="k">발행 글</div>' + (b && isNum(b.posts_total) ? '<div class="v num">' + fmt(b.posts_total) + '</div>' : '<div class="v na">' + NA + '</div>') + '</div>' +
       '<div><div class="k">방문자</div>' + (b && isNum(b.visitors_total) ? '<div class="v num">' + fmt(b.visitors_total) + '</div>' : '<div class="v na">' + NA + '</div>') + '</div>' +
-    '</div><div class="d">' + (b ? esc(b.date) + ' 기준' : '') + '</div></div></div>';
+    '</div><div class="d">' + provenance(b, 'blog_daily') + '</div></div></div>';
   h += '<div class="group" id="s-blog"><h2>블로그</h2></div><div class="card">' +
     blogRow('티스토리 · AI 부업 실험실', 'editor41386.tistory.com', tis) +
-    (ads ? '<div class="row"><div class="l"><div class="t">애드센스 <span class="chip warn">' + esc(String(ads.status_text).split('—')[0].trim()) + '</span></div><div class="s">' + esc(String(ads.status_text).split('—').slice(1).join('—').trim() || ads.status_text) + ' · ' + esc(ads.milestone) + '</div></div><div class="r"><div class="d">' + esc(ads.updated_at) + '</div></div></div>' : '') +
+    (ads ? '<div class="row"><div class="l"><div class="t">애드센스 <span class="chip warn">' + esc(String(ads.status_text).split('—')[0].trim()) + '</span></div><div class="s">' + esc(String(ads.status_text).split('—').slice(1).join('—').trim() || ads.status_text) + ' · ' + esc(ads.milestone) + '</div></div><div class="r"><div class="d">' + esc(ads.updated_at) + '</div></div></div>' : '<div class="row"><div class="l"><div class="t">애드센스</div><div class="s">미수집 · project_status 실측 기록 없음</div></div></div>') +
     blogRow('네이버 · 잡다한 실험실', 'blog.naver.com/pdm0809', naver) +
     '<div class="src">방문자는 두 블로그 모두 공식 API가 없어(관리자 통계 로그인 전용) 미수집입니다. 글 수는 공개 페이지·RSS 실측값입니다.</div></div>';
 
@@ -441,41 +455,39 @@ function render(d){
   const cpClick = mrow(mm, 'coupang', '클릭'), cpBuy = mrow(mm, 'coupang', '구매'), cpSales = mrow(mm, 'coupang', '누적 판매액(원)');
   const sv = (r, won) => r && isNum(r.value) ? (won ? '₩' : '') + fmt(r.value) : null;
   const scRev = mrow(mm, 'shopping_connect', '수익(원)');
-  const sc = ps.shopping_connect;
   h += '<div class="group" id="s-rev"><h2>수익</h2><span class="gsub">실제 발생·확인된 실적만</span></div>' +
-    '<div class="card"><div class="card-h"><h3>쿠팡 파트너스</h3>' + (ps.coupang ? '<span class="chip warn ml">' + esc(String(ps.coupang.status_text).split('—').pop().trim()) + '</span>' : '') + '</div>' +
+    '<div class="card"><div class="card-h"><h3>쿠팡 파트너스</h3>' + '</div>' +
       '<div class="stats">' +
-        [['클릭', sv(cpClick)], ['구매', sv(cpBuy)], ['수익', sv(cpRev, true)]].map(([k, v]) =>
-          '<div class="stat"><div class="k">' + k + '</div><div class="v num">' + (v === null ? naHtml() : v) + '</div></div>').join('') +
+        [['클릭', sv(cpClick), cpClick], ['구매', sv(cpBuy), cpBuy], ['수익', sv(cpRev, true), cpRev]].map(([k, v, r]) =>
+          '<div class="stat"><div class="k">' + k + '</div><div class="v num">' + (v === null ? naHtml() : v) + '</div><div class="d">' + provenance(r, 'manual_metrics') + '</div></div>').join('') +
       '</div>' +
-      '<div class="line-item"><div class="k">실제 발생한 구매 총액<small>수수료 아님 · 구매자가 결제한 상품 금액 합계</small></div><div class="v num">' + (sv(cpSales, true) || naHtml()) + '</div></div>' +
+      '<div class="line-item"><div class="k">실제 발생한 구매 총액 (수수료 아님)<small> · 구매자가 결제한 상품 금액 합계</small></div><div class="v num">' + (sv(cpSales, true) || naHtml()) + '<div class="d">' + provenance(cpSales, 'manual_metrics') + '</div></div></div>' +
       '<div class="src">' + (cpRev ? esc(cpRev.checked_at || cpRev.date) + ' 수동 확인분' : '수동 확인 기록 없음') + ' · 쿠팡 실적은 자동 수집 금지 규칙에 따라 수동 확인분만 날짜와 함께 표시합니다 · 파트너스 ID AF4483016</div></div>' +
-    '<div class="card"><div class="card-h"><h3>네이버 쇼핑커넥트</h3>' + (sc ? '<span class="chip ok ml">' + esc(String(sc.status_text).split('—').pop().trim()) + '</span>' : '') + '</div>' +
+    '<div class="card"><div class="card-h"><h3>네이버 쇼핑커넥트</h3>' + '</div>' +
       (scRev && isNum(scRev.value)
         ? '<div class="line-item"><div class="k">수익<small>' + esc(scRev.checked_at || scRev.date) + ' 정산 확인</small></div><div class="v num">₩' + fmt(scRev.value) + '</div></div>'
         : '<div class="nores"><div class="k">수익</div><div class="v">발생 실적 없음 (정산 확인된 수익 없음)</div></div>') +
-      (sc ? '<div class="ops"><div class="cap">운영 현황 (금액 없음)</div><ul><li><span>발행 상태 · ' + esc(sc.status_text) + '</span><span>' + esc(sc.updated_at) + '</span></li><li><span>' + esc(sc.milestone) + '</span><span>' + esc(sc.source_file) + '</span></li></ul></div>' : '') +
     '</div>';
 
   // 6. 초대코드
   const ivF = mrow(mm, 'invite_arkhzz', '가입 친구(명)'), ivR = mrow(mm, 'invite_arkhzz', '잔여 한도(회)'), ivB = mrow(mm, 'invite_arkhzz', '추가 토큰 잔액');
-  const tok = r => !r || !isNum(r.value) ? null : (Number(r.value) >= 1e8 ? (Number(r.value) / 1e8).toLocaleString('ko-KR') + '억' : fmt(r.value)) + '<small style="font-size:11px;color:var(--sub)"> 토큰</small>';
+  const tok = r => !r || !isNum(r.value) ? null : (Number(r.value) >= 1e8 ? (Number(r.value) / 1e8).toLocaleString('ko-KR') + '억' : fmt(r.value)) + '<small> 토큰</small>';
   h += '<div class="group" id="s-inv"><h2>초대코드</h2></div><div class="card"><div class="card-h"><h3>Muse 초대코드</h3>' + (ps.invite ? '<span class="chip ok ml">' + esc(ps.invite.status_text) + '</span>' : '') + '</div>' +
     '<div class="code">ARKHZZ</div>' +
     '<div class="stats">' +
-      '<div class="stat"><div class="k">가입 친구</div><div class="v num">' + (ivF && isNum(ivF.value) ? fmt(ivF.value) + '<small style="font-size:11px;color:var(--sub)">명</small>' : naHtml()) + '</div></div>' +
-      '<div class="stat"><div class="k">잔여 한도</div><div class="v num">' + (ivR && isNum(ivR.value) ? fmt(ivR.value) + '<small style="font-size:11px;color:var(--sub)">회</small>' : naHtml()) + '</div></div>' +
-      '<div class="stat"><div class="k">추가 토큰 잔액</div><div class="v num">' + (tok(ivB) || naHtml()) + '</div></div>' +
+      '<div class="stat"><div class="k">가입 친구</div><div class="v num">' + (ivF && isNum(ivF.value) ? fmt(ivF.value) + '<small>명</small>' : naHtml()) + '</div><div class="d">' + provenance(ivF, 'manual_metrics') + '</div></div>' +
+      '<div class="stat"><div class="k">잔여 한도</div><div class="v num">' + (ivR && isNum(ivR.value) ? fmt(ivR.value) + '<small>회</small>' : naHtml()) + '</div><div class="d">' + provenance(ivR, 'manual_metrics') + '</div></div>' +
+      '<div class="stat"><div class="k">추가 토큰 잔액</div><div class="v num">' + (tok(ivB) || naHtml()) + '</div><div class="d">' + provenance(ivB, 'manual_metrics') + '</div></div>' +
     '</div><div class="src">토큰 잔액은 금액(원)이 아니라 Muse 사용 토큰 수량입니다 · 기준일 ' + esc(mdate(mm, 'invite_arkhzz', '가입 친구(명)')) + ' · 초대코드 찾기방 기록</div></div>';
 
   // 7. 프로젝트 상태
   const warnIds = { adsense: 1, coupang: 1 };
   h += '<div class="group" id="s-proj"><h2>프로젝트 상태</h2></div><div class="card">' +
     d.project_status.filter(p => p.project_id).map(p =>
-      '<div class="row"><span class="dot' + (warnIds[p.project_id] ? ' warn' : '') + '"></span><div class="l"><div class="t">' + esc(p.name) + '</div><div class="s">' + esc(p.status_text) + (p.milestone ? ' · ' + esc(p.milestone) : '') + '</div></div><div class="r"><div class="d">' + esc(p.updated_at) + '</div></div></div>').join('') +
-    '</div>';
+      '<div class="row"><span class="dot' + (warnIds[p.project_id] ? ' warn' : '') + '"></span><div class="l"><div class="t">' + projectName(p) + '</div><div class="s">' + esc(p.status_text) + (p.milestone ? ' · ' + esc(p.milestone) : '') + '</div></div><div class="r"><div class="d">' + esc(p.updated_at || NA) + ' · ' + esc(p.source_file || 'project_status') + '</div></div></div>').join('') +
+    (d.project_status.some(p => p.project_id) ? '' : '<div class="na">미수집 · 프로젝트 상태 기록 없음</div>') + '</div>';
 
-  h += '<div class="foot">수집: 매일 21:30 자동 (지잡대 Studio 분석 로그 · 스토리스피커 상태 파일 · 티스토리 공개 페이지). 인스타그램·Threads는 커넥터 조회값, 쿠팡·초대코드는 수동 확인분을 날짜와 함께 표시합니다. 수집이 빈 지표는 0이 아니라 미수집으로 표시합니다. 유튜브 4채널(지잡대TV·스토리스피커·새벽바다·Music Atlas)은 Studio 상세 지표와 영상별 실측을 매일 같은 기준으로 쌓습니다.</div>';
+  h += '<footer class="foot">모든 숫자는 시트 실측 기록입니다. 빈 지표는 미수집으로 표시합니다. 각 지표의 기준일을 확인해 주세요. 구독자 증감은 직전 실측 대비입니다.</footer>';
 
   document.getElementById('app').innerHTML = h;
 }
@@ -489,11 +501,12 @@ function render(d){
     catch (e) {
       el.className = 'fail';
       el.textContent = '지표를 불러오지 못했습니다. 잠시 후 새로고침해 주세요.';
-      document.getElementById('app').innerHTML = '';
+      document.getElementById('updTime').textContent = '미수집';
+      render(Object.fromEntries(TABS.map(tab => [tab, []])));
       return;
     }
     el.className = 'fallback';
-    el.textContent = '지금은 시트 직접 통로로 표시 중입니다 (GAS 통로는 소유자 최초 승인 후 자동 전환).';
+    el.textContent = 'GAS 연결에 실패해 구글시트 직접 읽기로 표시 중입니다.';
   }
   render(d);
 })();

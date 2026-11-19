@@ -1658,6 +1658,38 @@
 <body>
 <div class="wrap">
   <p class="top-disclosure" role="note">이 게시물은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.</p>
+
+  <style>
+    /* 쿠팡 상품 검색 — 2026-11-19 추가 */
+    .search-box { padding: 12px 12px 0; }
+    .search-box form { display: flex; gap: 6px; }
+    .search-box input {
+      flex: 1; min-width: 0; font-family: inherit; font-size: 15px; font-weight: 600;
+      padding: 11px 12px; border: 1px solid #EDD9AC; border-radius: 10px; background: #fff; color: inherit;
+    }
+    .search-box input:focus { outline: 2px solid #F59F00; outline-offset: 0; }
+    .search-box button {
+      border: 1px solid #F59F00; border-radius: 10px; cursor: pointer; font-family: inherit;
+      background: linear-gradient(180deg, #FFB703, #F59F00); color: #3A2700;
+      font-size: 15px; font-weight: 800; padding: 11px 18px; white-space: nowrap;
+    }
+    .search-box button:disabled { filter: grayscale(0.4); opacity: 0.7; cursor: default; }
+    .search-status { padding: 10px 12px 0; font-size: 14px; font-weight: 700; color: #7A4A00; text-align: center; }
+    #searchResults { padding-top: 10px; }
+    #searchResults:empty { display: none; }
+    .badge-rocket { background: #0F6FDE; }
+    .badge-free { background: #2B8A3E; }
+    .search-badges { display: flex; gap: 4px; flex-wrap: wrap; }
+  </style>
+  <div class="search-box">
+    <form id="searchForm" role="search">
+      <input type="search" id="searchInput" placeholder="찾는 상품을 검색해 보세요 (예: 고양이 사료)" aria-label="쿠팡 상품 검색" maxlength="100" autocomplete="off">
+      <button type="submit" id="searchButton">검색</button>
+    </form>
+  </div>
+  <p class="search-status" id="searchStatus" hidden></p>
+  <div class="list" id="searchResults" aria-live="polite"></div>
+
   <div class="funnel-video">
     <div class="frame">
       <video src="hub_guide.mp4" autoplay muted loop playsinline preload="auto" title="세 마리의 상품 창고에 오신 걸 환영해요"></video>
@@ -3516,6 +3548,76 @@
   setTimeout(function () {
     card.scrollIntoView({ behavior: 'smooth', block: 'center' });
   }, 1400);
+})();
+</script>
+<script>
+/* 쿠팡 상품 검색 — 2026-11-19 추가. 프록시(Supabase Edge Function)가 파트너스 API를 대신 호출합니다. */
+(function () {
+  var API = 'https://saokvvmfdgybocpfamhl.supabase.co/functions/v1/coupang-search';
+  var form = document.getElementById('searchForm');
+  var input = document.getElementById('searchInput');
+  var button = document.getElementById('searchButton');
+  var status = document.getElementById('searchStatus');
+  var results = document.getElementById('searchResults');
+  if (!form || !input || !results) return;
+
+  function esc(s) {
+    return String(s == null ? '' : s)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  }
+  function setStatus(msg) {
+    status.textContent = msg || '';
+    status.hidden = !msg;
+  }
+  function cardHTML(it) {
+    var badges = '';
+    if (it.isRocket) badges += '<span class="video-tag badge-rocket">로켓배송</span>';
+    if (it.isFreeShipping) badges += '<span class="video-tag badge-free">무료배송</span>';
+    if (it.productRating) badges += '<span class="video-tag">★ ' + esc(it.productRating) + (it.reviewCount ? ' · 리뷰 ' + Number(it.reviewCount).toLocaleString('ko-KR') : '') + '</span>';
+    var price = (it.productPrice == null) ? '' : Number(it.productPrice).toLocaleString('ko-KR') + '원';
+    return '<article class="card">' +
+      '<div class="thumb"><img src="' + esc(it.productImage) + '" alt="' + esc(it.productName) + '" loading="lazy"></div>' +
+      '<div class="info">' +
+        (badges ? '<div class="search-badges">' + badges + '</div>' : '') +
+        '<h2 class="name">' + esc(it.productName) + '</h2>' +
+        '<p class="price">' + esc(price) + '</p>' +
+        '<div class="buy"><a href="' + esc(it.affiliateUrl) + '" target="_blank" rel="sponsored nofollow noopener">쿠팡에서 보기</a></div>' +
+      '</div></article>';
+  }
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var keyword = input.value.trim();
+    if (keyword.length < 2) {
+      setStatus('검색어를 두 글자 이상 입력해 주세요.');
+      results.innerHTML = '';
+      return;
+    }
+    button.disabled = true;
+    setStatus('검색 중이에요…');
+    results.innerHTML = '';
+    fetch(API + '?keyword=' + encodeURIComponent(keyword) + '&limit=10')
+      .then(function (res) {
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        return res.json();
+      })
+      .then(function (data) {
+        var items = (data && data.items) || [];
+        if (!items.length) {
+          setStatus('검색 결과가 없어요. 다른 검색어로 시도해 보세요.');
+          return;
+        }
+        setStatus('검색 결과 ' + items.length + '개');
+        results.innerHTML = items.map(cardHTML).join('');
+      })
+      .catch(function () {
+        setStatus('검색 중 오류가 발생했어요. 잠시 후 다시 시도해 주세요.');
+      })
+      .finally(function () {
+        button.disabled = false;
+      });
+  });
 })();
 </script>
 </body>

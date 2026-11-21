@@ -3551,7 +3551,7 @@
 })();
 </script>
 <script>
-/* 쿠팡 상품 검색 — 2026-11-19 추가. 프록시(Supabase Edge Function)가 파트너스 API를 대신 호출합니다. */
+/* 쿠팡 상품 검색 — 2026-11-19 추가, 2026-11-21 이동 방식으로 변경. 제출 시 프록시(Supabase Edge Function)가 쿠팡 전체 검색 제휴 딥링크를 받아 그쪽으로 이동하고, 실패하면 인페이지 결과(최대 10개)로 폴백합니다. */
 (function () {
   var API = 'https://saokvvmfdgybocpfamhl.supabase.co/functions/v1/coupang-search';
   var form = document.getElementById('searchForm');
@@ -3595,27 +3595,40 @@
       return;
     }
     button.disabled = true;
-    setStatus('검색 중이에요…');
+    setStatus('쿠팡에서 전체 결과를 여는 중입니다…');
     results.innerHTML = '';
-    fetch(API + '?keyword=' + encodeURIComponent(keyword) + '&limit=10')
+    fetch(API + '?mode=link&keyword=' + encodeURIComponent(keyword))
       .then(function (res) {
         if (!res.ok) throw new Error('HTTP ' + res.status);
         return res.json();
       })
       .then(function (data) {
-        var items = (data && data.items) || [];
-        if (!items.length) {
-          setStatus('검색 결과가 없어요. 다른 검색어로 시도해 보세요.');
-          return;
-        }
-        setStatus('검색 결과 ' + items.length + '개');
-        results.innerHTML = items.map(cardHTML).join('');
+        if (!data || !data.url) throw new Error('no url');
+        location.href = data.url;
       })
       .catch(function () {
-        setStatus('검색 중 오류가 발생했어요. 잠시 후 다시 시도해 주세요.');
-      })
-      .finally(function () {
-        button.disabled = false;
+        /* 링크 이동 실패 시 폴백: 기존 인페이지 결과(최대 10개) */
+        setStatus('검색 중이에요…');
+        fetch(API + '?keyword=' + encodeURIComponent(keyword) + '&limit=10')
+          .then(function (res) {
+            if (!res.ok) throw new Error('HTTP ' + res.status);
+            return res.json();
+          })
+          .then(function (data) {
+            var items = (data && data.items) || [];
+            if (!items.length) {
+              setStatus('검색 결과가 없어요. 다른 검색어로 시도해 보세요.');
+              return;
+            }
+            setStatus('검색 결과 ' + items.length + '개');
+            results.innerHTML = items.map(cardHTML).join('');
+          })
+          .catch(function () {
+            setStatus('검색 중 오류가 발생했어요. 잠시 후 다시 시도해 주세요.');
+          })
+          .finally(function () {
+            button.disabled = false;
+          });
       });
   });
 })();
